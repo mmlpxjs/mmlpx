@@ -12,7 +12,7 @@ export default ViewModel => (target, name, descriptor) => {
 		throw new SyntaxError('you can\'t decorate a class with viewModel decorator');
 	}
 
-	const instance = invoker(InjectedClass, { scope: 'prototype' });
+	const instance = invoker(ViewModel, { scope: 'prototype' });
 	descriptor.initializer = () => instance;
 	descriptor.value = instance;
 };

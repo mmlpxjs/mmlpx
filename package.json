@@ -1,12 +1,12 @@
 {
   "name": "mmlpx",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "mobx model layer paradigm",
   "homepage": "https://github.com/mmlpx/mmlpx",
   "main": "./index.js",
   "scripts": {
     "build": "rm -fr lib && NODE_ENV=production babel ./ --out-dir lib --ignore **/__tests__,node_modules && cp package.json lib/package.json",
-    "lint": "eslint src",
+    "lint": "eslint ./",
     "start": "node server.js",
     "test": "npm run lint",
     "pub": "npm run lint && npm run build && npm publish lib",
@@ -37,8 +37,11 @@
     "express": "^4.15.3",
     "husky": "^0.14.1"
   },
+  "eslintConfig": {
+    "extends": "shuyun"
+  },
   "eslintIgnore": [
-    "build/*"
+    "lib/*"
   ],
   "browserslist": [
     "> 1%",
