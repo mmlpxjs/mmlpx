@@ -5,11 +5,13 @@
  */
 
 import inject from './decorators/inject';
+import viewModel from './decorators/viewModel';
 import store from './decorators/store';
 import invoker from './core/dependency-inject/invoker';
 
 export {
 	inject,
-	store,
-	invoker
+	invoker,
+	viewModel,
+	store
 };
