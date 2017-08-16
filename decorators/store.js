@@ -6,13 +6,13 @@
 
 import { get } from '../core/dependency-inject/container';
 
-export default Store => (target, name, descriptor) => {
+export default (Store, ...args) => (target, name, descriptor) => {
 
 	if (name === void 0) {
 		throw new SyntaxError('you can\'t decorate a class with store decorator');
 	}
 
-	const store = get(Store);
+	const store = get(Store, ...args);
 
 	// create a mask-object to prevent modify original store field directly
 	const maskStore = Object.create(store);

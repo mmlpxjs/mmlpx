@@ -6,7 +6,7 @@
 
 import { get } from './container';
 
-export default (InjectedClass, opts = { scope: 'singleton' }) => {
+export default (InjectedClass, opts = { scope: 'singleton' }, ...args) => {
 
 	const { scope } = opts;
 
@@ -16,12 +16,12 @@ export default (InjectedClass, opts = { scope: 'singleton' }) => {
 
 		case 'singleton':
 
-			instance = get(InjectedClass);
+			instance = get(InjectedClass, ...args);
 			break;
 
 		case 'prototype':
 
-			instance = new InjectedClass();
+			instance = new InjectedClass(...args);
 			break;
 
 		default:

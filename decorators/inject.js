@@ -4,15 +4,15 @@
  * @since 2017-07-11
  */
 
-import invoker from '../core/dependency-inject/invoker';
+import invoke from '../core/dependency-inject/invoke';
 
-export default (InjectedClass, opts = { scope: 'singleton' }) => (target, name, descriptor) => {
+export default (InjectedClass, opts = { scope: 'singleton' }, ...args) => (target, name, descriptor) => {
 
 	if (name === void 0) {
 		throw new SyntaxError('you can\'t decorate a class with inject decorator');
 	}
 
-	const instance = invoker(InjectedClass, opts);
+	const instance = invoke(InjectedClass, opts, ...args);
 	descriptor.initializer = () => instance;
 	descriptor.value = instance;
 

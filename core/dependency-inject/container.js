@@ -11,13 +11,13 @@ const instanceSymbol = Symbol('injection');
 
 const container = new LRUCache();
 
-export const get = InjectedClass => {
+export const get = (InjectedClass, ...args) => {
 
 	let instance = null;
 
 	if (!InjectedClass[instanceSymbol]) {
 
-		instance = new InjectedClass();
+		instance = new InjectedClass(...args);
 
 		// set symbol
 		const uuid = v4();
