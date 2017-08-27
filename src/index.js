@@ -7,9 +7,11 @@
 import inject from './decorators/inject';
 import ViewModel from './decorators/ViewModel';
 import Store from './decorators/Store';
+import postConstruct from './decorators/postConstruct';
 
 export {
 	inject,
 	ViewModel,
-	Store
+	Store,
+	postConstruct
 };

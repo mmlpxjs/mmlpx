@@ -1,6 +1,6 @@
 {
   "name": "mmlpx",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "mobx model layer paradigm",
   "homepage": "https://github.com/mmlpxjs/mmlpx",
   "main": "./index.js",
