@@ -1,8 +1,8 @@
 # mmlpx
 
-[![Build Status](https://img.shields.io/travis/mmlpx/mmlpx.svg?style=flat-square)](https://travis-ci.org/mmlpx/mmlpx)
+[![Build Status](https://img.shields.io/travis/mmlpxjs/mmlpx.svg?style=flat-square)](https://travis-ci.org/mmlpxjs/mmlpx)
 [![npm version](https://img.shields.io/npm/v/mmlpx.svg?style=flat-square)](https://www.npmjs.com/package/mmlpx)
 [![npm downloads](https://img.shields.io/npm/dt/mmlpx.svg?style=flat-square)](https://www.npmjs.com/package/mmlpx)
-[![coverage](https://img.shields.io/codecov/c/github/mmlpx/mmlpx.svg?style=flat-square)](https://codecov.io/gh/mmlpx/mmlpx)
+[![coverage](https://img.shields.io/codecov/c/github/mmlpxjs/mmlpx.svg?style=flat-square)](https://codecov.io/gh/mmlpxjs/mmlpx)
 
 mobx model layer paradigm
