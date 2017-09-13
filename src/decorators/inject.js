@@ -4,13 +4,8 @@
  * @since 2017-07-11
  */
 
-import invoke from '../core/dependency-inject/invoke';
-
-import { modelSymbol } from './meta';
+import instantiate from '../core/instantiate';
 import { incorrectAsClassPropertyDecorator } from '../utils/decorator-assert';
-
-import { genInitializer as genStoreInitializer, storeSymbol } from './Store';
-import { genInitializer as genViewModelInitializer, viewModelSymbol } from './ViewModel';
 
 export default (InjectedClass, ...args) => (target, name, descriptor) => {
 
@@ -18,18 +13,8 @@ export default (InjectedClass, ...args) => (target, name, descriptor) => {
 		incorrectAsClassPropertyDecorator('inject');
 	}
 
-	switch (InjectedClass[modelSymbol]) {
+	descriptor.initializer = function () {
+		return instantiate.apply(this, [InjectedClass, ...args]);
+	};
 
-		case storeSymbol:
-			descriptor.initializer = genStoreInitializer(InjectedClass, ...args);
-			break;
-
-		case viewModelSymbol:
-			descriptor.initializer = genViewModelInitializer(InjectedClass, ...args);
-			break;
-
-		default:
-			descriptor.initializer = () => invoke(InjectedClass, { scope: 'singleton' }, ...args);
-
-	}
 };

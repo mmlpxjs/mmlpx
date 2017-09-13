@@ -1,11 +1,11 @@
 {
   "name": "mmlpx",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "mobx model layer paradigm",
   "homepage": "https://github.com/mmlpxjs/mmlpx",
   "main": "./index.js",
   "scripts": {
-    "build": "rm -fr lib && NODE_ENV=production babel ./src --out-dir lib --ignore node_modules && cp package.json lib/package.json && cp README.md lib/README.md",
+    "build": "rm -fr lib && NODE_ENV=production babel ./src --out-dir lib --ignore **/__tests__,node_modules && cp package.json lib/package.json && cp README.md lib/README.md",
     "start": "NODE_ENV=test ava -w",
     "pub": "npm run lint && npm run build && npm publish lib",
     "prepush": "npm run lint",

@@ -11,8 +11,8 @@
  */
 
 import { test } from 'ava';
-import Store, { storeSymbol } from '../Store';
-import { modelSymbol } from '../meta';
+import Store from '../Store';
+import { modelSymbol, storeSymbol } from '../../core/meta';
 
 @Store
 class StoreClass {}

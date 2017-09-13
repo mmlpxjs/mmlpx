@@ -5,8 +5,8 @@
  */
 
 import { test } from 'ava';
-import ViewModel, { viewModelSymbol } from '../ViewModel';
-import { modelSymbol } from '../meta';
+import ViewModel from '../ViewModel';
+import { modelSymbol, viewModelSymbol } from '../../core/meta';
 
 @ViewModel
 class ViewModelClass {}
