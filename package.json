@@ -1,6 +1,6 @@
 {
   "name": "mmlpx",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "mobx model layer paradigm",
   "homepage": "https://github.com/mmlpxjs/mmlpx",
   "main": "./index.js",
@@ -9,7 +9,7 @@
     "start": "NODE_ENV=test ava -w",
     "pub": "npm run lint && npm run build && npm publish lib",
     "prepush": "npm run lint",
-    "test": "NODE_ENV=test nyc ava -v",
+    "test": "BABEL_ENV=test nyc ava -v",
     "report": "nyc report --reporter=html",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "coverageCheck": "nyc --check-coverage --lines 80 --functions 80 --branches 80 npm test",

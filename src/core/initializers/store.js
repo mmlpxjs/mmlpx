@@ -17,6 +17,5 @@ export default function initialize(Store, ...args) {
 	}
 
 	const store = get(Store, ...constructorParams);
-	// create a mask-object to prevent modify original store field directly
-	return Object.create(store);
+	return store;
 }
