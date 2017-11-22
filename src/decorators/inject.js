@@ -7,14 +7,21 @@
 import instantiate from '../core/instantiate';
 import { incorrectAsClassPropertyDecorator } from '../utils/decorator-assert';
 
-export default (InjectedClass, ...args) => (target, name, descriptor) => {
+export default (InjectedClass, ...args) => (target, name) => {
 
 	if (name === void 0) {
 		incorrectAsClassPropertyDecorator('inject');
 	}
 
-	descriptor.initializer = function () {
-		return instantiate.apply(this, [InjectedClass, ...args]);
+	let initializedValue;
+
+	return {
+		enumerable: true,
+		configurable: true,
+		get() {
+			return initializedValue ? initializedValue : initializedValue = instantiate.apply(this, [InjectedClass, ...args]);
+		},
+		set() {}
 	};
 
 };

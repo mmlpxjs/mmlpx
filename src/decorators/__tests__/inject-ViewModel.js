@@ -45,10 +45,13 @@ test('injected viewModel will only construct at initial period and postConstruct
 		viewModel = null;
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	const controller = new Controller();
-
+	t.is(spyFn.called, false);
+	// @see https://github.com/mobxjs/mobx/blob/master/src/utils/decorators.ts#L4
+	// eslint-disable-next-line no-unused-vars
+	const unused = (controller.viewModel, controller.viewModel);
 	t.is(spyFn.called, true);
+	t.is(spyFn.callCount, 1);
 	t.is(onInitSpy.calledAfter(spyFn), true);
 
 });
