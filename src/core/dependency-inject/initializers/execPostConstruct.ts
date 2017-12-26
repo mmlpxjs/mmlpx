@@ -7,13 +7,11 @@
 import { isFunction } from 'lodash';
 import { postConstructSymbol } from '../meta';
 
-export default function (instance) {
+export default function execPostConstruct(instance: any): void {
 
 	const fn = instance[postConstructSymbol];
 
 	if (isFunction(fn)) {
-		return fn.call(instance);
+		fn.call(instance);
 	}
-
-	return null;
 }

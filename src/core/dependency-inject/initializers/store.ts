@@ -5,10 +5,10 @@
  */
 
 import { flatten, isFunction } from 'lodash';
-import invoke from '../dependency-inject/invoke';
-import execPostConstruct from './execPostConstruct';
+import Injector, { Scope } from '../Injector';
+import { modelNameSymbol } from '../meta';
 
-export default function initialize(ViewModel, ...args) {
+export default function initialize<T>(this: any, injector: Injector, Store: any, ...args: any[]) {
 
 	let constructorParams = args;
 
@@ -17,9 +17,7 @@ export default function initialize(ViewModel, ...args) {
 		constructorParams = flatten([args[0].call(this)]);
 	}
 
-	const viewModel = invoke(ViewModel, { scope: 'prototype' }, ...constructorParams);
-
-	execPostConstruct(viewModel);
-
-	return viewModel;
+	const name = Store[modelNameSymbol];
+	const store = injector.get<T>(Store, { scope: Scope.Singleton, name }, ...constructorParams);
+	return store;
 }

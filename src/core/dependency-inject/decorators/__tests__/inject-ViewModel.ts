@@ -7,10 +7,12 @@
 import { test } from 'ava';
 import { spy } from 'sinon';
 import inject from '../inject';
-import ViewModel from '../ViewModel';
 import postConstruct from '../postConstruct';
+import ViewModel from '../ViewModel';
 
-let spyFn, onInitSpy, ViewModelClass = null;
+let spyFn: any;
+let onInitSpy: any;
+let ViewModelClass: any = null;
 
 test.beforeEach(() => {
 
@@ -20,7 +22,10 @@ test.beforeEach(() => {
 	@ViewModel
 	class Klass {
 
-		constructor(name, age) {
+		name: string;
+		age: number;
+
+		constructor(name: string, age: number) {
 			this.name = name;
 			this.age = age;
 			spyFn(name);
@@ -30,7 +35,6 @@ test.beforeEach(() => {
 		onInit() {
 			onInitSpy(this.name);
 		}
-
 	}
 
 	ViewModelClass = Klass;
@@ -48,7 +52,7 @@ test('injected viewModel will only construct at initial period and postConstruct
 	const controller = new Controller();
 	t.is(spyFn.called, false);
 	// @see https://github.com/mobxjs/mobx/blob/master/src/utils/decorators.ts#L4
-	// eslint-disable-next-line no-unused-vars
+	// tslint:disable-next-line
 	const unused = (controller.viewModel, controller.viewModel);
 	t.is(spyFn.called, true);
 	t.is(spyFn.callCount, 1);
@@ -63,7 +67,7 @@ test('inject viewModel with static params', t => {
 	class Controller {
 
 		@inject(ViewModelClass, name)
-		viewModel = null;
+		viewModel: any = null;
 	}
 
 	const controller = new Controller();
@@ -81,10 +85,10 @@ test('inject viewModel with dynamic params', t => {
 		name = 'kuitos';
 		age = 18;
 
-		@inject(ViewModelClass, function () {
+		@inject(ViewModelClass, function(this: any) {
 			return [this.name, this.age];
 		})
-		viewModel = null;
+		viewModel: any = null;
 	}
 
 	const controller = new Controller();

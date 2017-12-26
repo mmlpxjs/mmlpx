@@ -9,17 +9,18 @@ import ViewModel from '../../ViewModel';
 @ViewModel
 export default class Store {
 
-	filed = 'viewModel';
+	private filed = 'viewModel';
+	private id: string;
 
-	constructor(id) {
+	constructor(id: string) {
 		this.id = id;
 	}
 
-	getFiled() {
+	public getFiled() {
 		return this.filed;
 	}
 
-	getId() {
+	public getId() {
 		return this.id;
 	}
 
