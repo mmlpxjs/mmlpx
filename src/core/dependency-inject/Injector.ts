@@ -56,7 +56,7 @@ export default class Injector {
 		const { scope = Scope.Request, name = InjectedClass[modelNameSymbol] || v4() } = options;
 		const { container } = this;
 
-		let instance = null;
+		let instance: T;
 
 		switch (scope) {
 

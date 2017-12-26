@@ -1,14 +1,17 @@
 {
   "name": "mmlpx",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "mobx model layer paradigm",
   "homepage": "https://github.com/mmlpxjs/mmlpx",
-  "main": "./index.js",
+  "main": "./lib/index.js",
+  "module": "./esm/index.js",
   "scripts": {
-    "build": "rm -fr lib && npm run tsc && cp package.json lib/package.json && cp README.md lib/README.md",
-    "tsc": "tsc",
+    "build": "npm run tsc && cp {package.json,README.md,.npmignore} dist",
+    "tsc": "npm run tsc:cjs & npm run tsc:mjs",
+    "tsc:cjs": "rm -fr dist/lib && tsc",
+    "tsc:mjs": "rm -fr dist/esm && tsc -p tsconfig.mjs.json",
     "start": "tsc -w && ava -w",
-    "pub": "npm run lint && npm run build && npm publish lib",
+    "pub": "npm run lint && npm run build && npm publish dist",
     "prepush": "npm run lint",
     "test": "tsc && nyc ava -v",
     "test:pure": "tsc && ava",
@@ -43,6 +46,6 @@
     "not ie <= 8"
   ],
   "ava": {
-    "files": "lib/**/__tests__/**/*.js"
+    "files": "dist/lib/**/__tests__/**/*.js"
   }
 }
