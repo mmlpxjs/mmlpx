@@ -6,11 +6,11 @@
 
 import instantiate from '../instantiate';
 
-export default <T>(InjectedClass: new() => T, ...args: any[]): PropertyDecorator => (target: object, key: PropertyKey) => {
+export default <T>(InjectedClass: new() => T, ...args: any[]): PropertyDecorator => () => {
 
 	let initializedValue: T | null = null;
 
-	Object.defineProperty(target, key, {
+	return {
 		enumerable: true,
 		configurable: true,
 		get() {
@@ -18,5 +18,5 @@ export default <T>(InjectedClass: new() => T, ...args: any[]): PropertyDecorator
 		},
 		// tslint:disable-next-line
 		set() {},
-	});
+	};
 };
