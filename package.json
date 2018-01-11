@@ -5,6 +5,7 @@
   "homepage": "https://github.com/mmlpxjs/mmlpx",
   "main": "./lib/index.js",
   "module": "./esm/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "npm run tsc && cp {package.json,README.md,.npmignore} dist",
     "tsc": "npm run tsc:cjs & npm run tsc:mjs",
