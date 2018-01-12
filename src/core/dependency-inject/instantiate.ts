@@ -10,7 +10,7 @@ import Injector, { Scope } from './Injector';
 import { modelSymbol, storeSymbol, viewModelSymbol } from './meta';
 
 const injector = Injector.getDefaultInjector();
-export default function instantiate<T>(this: any, InjectedClass: any, ...args: any[]) {
+export default function instantiate<T>(this: any, InjectedClass: any, ...args: any[]): T {
 
 	switch (InjectedClass[modelSymbol]) {
 
