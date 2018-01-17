@@ -13,7 +13,6 @@
     "tsc:mjs": "rm -fr dist/esm && tsc -p tsconfig.mjs.json",
     "start": "tsc -w && ava -w",
     "pub": "npm run lint && npm run build && npm publish dist",
-    "prepush": "npm run lint",
     "test": "tsc && nyc ava -v",
     "test:pure": "tsc && ava",
     "report": "nyc report --reporter=html",
