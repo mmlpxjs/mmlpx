@@ -9,8 +9,8 @@ mmlpx is abbreviation of **mobx model layer paradigm**
 
 ## layers
 
-ViewModel: page interaction logic
-Store: business logic and rules
+> ViewModel: page interaction logic  
+> Store: business logic and rules
 
 ![](https://github.com/mmlpxjs/mmlpx/blob/gh-pages/assets/mmlpx.png?raw=true)
 
