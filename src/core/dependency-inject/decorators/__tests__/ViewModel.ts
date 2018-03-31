@@ -6,7 +6,7 @@
 
 import { test } from 'ava';
 import Injector from '../../Injector';
-import { modelSymbol, viewModelSymbol } from '../../meta';
+import { modelTypeSymbol, viewModelSymbol } from '../../meta';
 import ViewModel from '../ViewModel';
 
 const viewModelName = 'kuitosViewModel';
@@ -15,8 +15,8 @@ const viewModelName = 'kuitosViewModel';
 class ViewModelClass {
 }
 
-test('ViewModel decorator should add modelSymbol', t => {
-	t.is((ViewModelClass as any)[modelSymbol], viewModelSymbol);
+test('ViewModel decorator should add modelTypeSymbol', t => {
+	t.is((ViewModelClass as any)[modelTypeSymbol], viewModelSymbol);
 });
 
 test('named ViewModel will be stored in injector', t => {

@@ -1,4 +1,4 @@
-import { modelNameSymbol, modelSymbol } from '../meta';
+import { modelNameSymbol, modelTypeSymbol } from '../meta';
 
 /**
  * @author Kuitos
@@ -10,7 +10,7 @@ export default function namedModelDecorator(name: string, type: symbol): ClassDe
 
 	return (target: any) => {
 		target[modelNameSymbol] = name;
-		target[modelSymbol] = type;
+		target[modelTypeSymbol] = type;
 		return target;
 	};
 }

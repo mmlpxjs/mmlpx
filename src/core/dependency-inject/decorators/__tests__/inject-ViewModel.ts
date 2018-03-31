@@ -97,3 +97,29 @@ test('inject viewModel with dynamic params', t => {
 	t.is(controller.viewModel.age, controller.age);
 
 });
+
+test('injected ViewModel instance should be independently with each other when be constructed repeatedly', t => {
+
+	class Controller {
+		name: string;
+		age: number;
+		@inject(ViewModelClass, function(this: any) {
+			return [this.name, this.age];
+		})
+		viewModel: any = null;
+
+		constructor(name: string, age: number) {
+			this.name = name;
+			this.age = age;
+		}
+	}
+
+	const controllerA = new Controller('kuitos', 18);
+	const controllerB = new Controller('kuitosA', 20);
+
+	t.is(controllerA.viewModel.name, controllerA.name);
+	t.is(controllerA.viewModel.age, controllerA.age);
+	t.is(controllerB.viewModel.name, controllerB.name);
+	t.is(controllerB.viewModel.age, controllerB.age);
+
+});

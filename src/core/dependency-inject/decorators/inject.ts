@@ -6,15 +6,31 @@
 
 import instantiate from '../instantiate';
 
-export default <T>(InjectedClass: new() => T, ...args: any[]): PropertyDecorator => () => {
+export default <T>(InjectedClass: new() => T, ...args: any[]): any => (_: T, name: string) => {
 
-	let initializedValue: T | null = null;
+	const symbol = Symbol(name);
 
 	return {
 		enumerable: true,
 		configurable: true,
-		get() {
-			return initializedValue || (initializedValue = instantiate.apply(this, [InjectedClass, ...args]));
+		get(this: any) {
+
+			if (!this[symbol]) {
+
+				const initializedValue = instantiate.apply(this, [InjectedClass, ...args]);
+
+				Object.defineProperty(this, symbol, {
+					enumerable: false,
+					configurable: false,
+					writable: false,
+					value: initializedValue,
+				});
+
+				return initializedValue;
+
+			} else {
+				return this[symbol];
+			}
 		},
 		// tslint:disable-next-line
 		set() {},
