@@ -5,8 +5,7 @@
  */
 
 import { isString } from 'lodash';
-import { v4 } from 'uuid';
-import { viewModelSymbol } from '../meta';
+import { modelTypeSymbol, viewModelSymbol } from '../meta';
 import namedModelDecorator from './namedModelDecorator';
 
 export default (arg1: any) => {
@@ -17,6 +16,6 @@ export default (arg1: any) => {
 		return namedModelDecorator(arg1, viewModelSymbol);
 	}
 
-	const name = v4();
-	return namedModelDecorator(name, viewModelSymbol)(arg1);
+	(arg1 as any)[modelTypeSymbol] = viewModelSymbol;
+	return arg1;
 };

@@ -4,19 +4,17 @@
  * @since 2017/12/25
  */
 
-import * as LRUCache from 'lru-cache';
-import { LRUEntry } from 'lru-cache';
-import { v4 } from 'uuid';
-import { modelNameSymbol } from './meta';
+import LRUCache, { LRUEntry } from 'lru-cache';
+import { Constructor } from './meta';
 
 export const enum Scope {
 	Singleton = 'singleton',
-	Request = 'request',
+	Prototype = 'prototype',
 }
 
 export interface InjectionOptions {
 	name?: string;
-	scope?: Scope;
+	scope: Scope;
 }
 
 export interface ISnapshot {
@@ -36,7 +34,6 @@ export interface IContainer<K, V> {
 
 export default class Injector {
 
-	static singleton: Injector | null = null;
 	private container: IContainer<string, any> = new LRUCache<string, any>();
 
 	private constructor(container?: IContainer<string, any>) {
@@ -47,36 +44,35 @@ export default class Injector {
 		return new Injector(container);
 	}
 
-	static getDefaultInjector() {
-		return Injector.singleton || (Injector.singleton = new Injector());
-	}
+	get<T>(InjectedClass: Constructor<T>, options: InjectionOptions, ...args: any[]): T {
 
-	get<T>(InjectedClass: any, options: InjectionOptions, ...args: any[]): T {
-
-		const { scope = Scope.Request, name = InjectedClass[modelNameSymbol] || v4() } = options;
+		const { scope, name } = options;
 		const { container } = this;
 
-		let instance: T;
+		let instance;
 
 		switch (scope) {
 
 			case Scope.Singleton:
 
-				instance = container.get(name);
-				if (instance === undefined) {
-					instance = new InjectedClass(...args);
-					// set injected class model name for next getting
-					InjectedClass[modelNameSymbol] = name;
+				if (name) {
+
+					instance = container.get(name);
+					if (instance === undefined) {
+						instance = new InjectedClass(...args);
+					}
+
+					// only singleton injection will be stored
+					container.set(name, instance);
+					break;
 				}
 
-				break;
+				throw new SyntaxError('A singleton injection must have a name!');
 
-			default:
+			case Scope.Prototype:
 				instance = new InjectedClass(...args);
 				break;
 		}
-
-		container.set(name, instance);
 
 		return instance;
 	}

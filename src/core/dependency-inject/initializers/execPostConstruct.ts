@@ -5,9 +5,9 @@
  */
 
 import { isFunction } from 'lodash';
-import { postConstructSymbol } from '../meta';
+import { IMmlpx, postConstructSymbol } from '../meta';
 
-export default function execPostConstruct(instance: any): void {
+export default function execPostConstruct<T extends IMmlpx<T>>(instance: T): void {
 
 	const fn = instance[postConstructSymbol];
 

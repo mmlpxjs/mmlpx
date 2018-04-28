@@ -7,20 +7,23 @@
 import initializeStore from './initializers/store';
 import initializeViewModel from './initializers/viewModel';
 import Injector, { Scope } from './Injector';
-import { modelTypeSymbol, storeSymbol, viewModelSymbol } from './meta';
+import { IMmlpx, modelNameSymbol, modelTypeSymbol, storeSymbol, viewModelSymbol } from './meta';
 
-const injector = Injector.getDefaultInjector();
-export default function instantiate<T>(this: any, InjectedClass: any, ...args: any[]): T {
+export const defaultInjector = Injector.newInstance();
+export default function instantiate<T>(this: any, InjectedClass: IMmlpx<T>, ...args: any[]): T {
 
 	switch (InjectedClass[modelTypeSymbol]) {
 
 		case storeSymbol:
-			return initializeStore.call(this, injector, InjectedClass, ...args);
+			return initializeStore.call(this, defaultInjector, InjectedClass, ...args);
 
 		case viewModelSymbol:
-			return initializeViewModel.call(this, injector, InjectedClass, ...args);
+			return initializeViewModel.call(this, defaultInjector, InjectedClass, ...args);
 
 		default:
-			return injector.get<T>(InjectedClass, { scope: Scope.Singleton }, ...args);
+			return defaultInjector.get(InjectedClass, {
+				scope: Scope.Singleton,
+				name: InjectedClass[modelNameSymbol],
+			}, ...args);
 	}
 }

@@ -9,3 +9,11 @@ export const modelNameSymbol = Symbol('mmlpx-model-name');
 export const storeSymbol = Symbol('Store');
 export const viewModelSymbol = Symbol('ViewModel');
 export const postConstructSymbol = Symbol('postConstruct');
+
+export type Constructor<T> = new(...args: any[]) => T;
+
+export interface IMmlpx<T> extends Constructor<T> {
+	[modelNameSymbol]: string;
+	[modelTypeSymbol]: symbol;
+	[postConstructSymbol]?: (...args: any[]) => void;
+}

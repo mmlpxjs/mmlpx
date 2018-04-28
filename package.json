@@ -7,26 +7,26 @@
   "module": "./esm/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "npm run tsc:build && npm run optimize && cp {package.json,README.md,.npmignore} dist",
+    "build": "npm run tsc:build && npm run optimize",
     "tsc:build": "rm -fr dist && tsc -p tsconfig.esm.json && cp -R dist/esm dist/lib",
     "optimize": "npm run babel:cjs & npm run babel:mjs",
     "babel:cjs": "babel dist/lib --out-dir dist/lib --plugins=lodash,transform-es2015-modules-commonjs",
     "babel:mjs": "babel dist/esm --out-dir dist/esm --plugins=lodash",
     "start": "tsc -w && ava -w",
-    "pub": "npm run lint && npm run build && npm publish dist",
+    "pub": "npm run lint && npm run build && cp {package.json,README.md,.npmignore} dist && npm publish dist",
     "prepush": "npm run lint",
     "test": "tsc && nyc ava -v",
     "test:pure": "tsc && ava",
     "report": "nyc report --reporter=html",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "coverageCheck": "nyc --check-coverage --lines 80 --functions 80 --branches 80 npm run test:pure",
-    "lint": "tslint ./src & npm test"
+    "lint": "tslint 'src/**/*.ts' & npm test"
   },
   "dependencies": {
     "lodash": "^4.17.4",
     "lru-cache": "^4.1.1",
     "mobx": "^3.4.1",
-    "tslib": "^1.8.1",
+    "tslib": "^1.9.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "sinon": "^4.1.3",
     "tslint": "^5.8.0",
     "tslint-eslint-rules": "^4.1.1",
-    "typescript": "^2.6.2"
+    "typescript": "^2.8.1"
   },
   "browserslist": [
     "> 1%",

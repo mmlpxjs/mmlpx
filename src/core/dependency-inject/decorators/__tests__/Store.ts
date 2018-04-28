@@ -11,7 +11,7 @@
  */
 
 import { test } from 'ava';
-import Injector from '../../Injector';
+import Injector, { Scope } from '../../Injector';
 import { modelTypeSymbol, storeSymbol } from '../../meta';
 import Store from '../Store';
 
@@ -28,8 +28,8 @@ test('ViewModel decorator should add modelTypeSymbol', t => {
 
 test('named store will be stored in injector', t => {
 
-	const injector = Injector.getDefaultInjector();
-	const instance = injector.get<StoreClass>(StoreClass, {});
+	const injector = Injector.newInstance();
+	const instance = injector.get(StoreClass as any, { scope: Scope.Singleton, name: storeName });
 	const snapshot = injector.dump();
 	t.is(snapshot[storeName], instance);
 });

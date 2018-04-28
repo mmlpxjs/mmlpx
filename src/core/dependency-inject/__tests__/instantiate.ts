@@ -6,6 +6,7 @@
 
 import { test } from 'ava';
 import instantiate from '../instantiate';
+import { IMmlpx, modelNameSymbol } from '../meta';
 
 test('default model instantiation is singleton', t => {
 
@@ -17,10 +18,14 @@ test('default model instantiation is singleton', t => {
 		}
 	}
 
+	const MmlpxKlass = Klass as IMmlpx<Klass>;
+
+	MmlpxKlass[modelNameSymbol] = 'test';
+
 	const cname = 'kuitos';
-	const klass = instantiate<Klass>(Klass, cname);
+	const klass = instantiate(MmlpxKlass, cname);
 	t.is(klass.name, cname);
 
-	const klass2 = instantiate<Klass>(Klass, cname);
+	const klass2 = instantiate(MmlpxKlass, cname);
 	t.is(klass, klass2);
 });

@@ -5,8 +5,9 @@
  */
 
 import instantiate from '../instantiate';
+import { IMmlpx } from '../meta';
 
-export default <T>(InjectedClass: new() => T, ...args: any[]): any => (_: T, name: string) => {
+export default <T>(InjectedClass: IMmlpx<T>, ...args: any[]): any => (_: T, name: string) => {
 
 	const symbol = Symbol(name);
 
