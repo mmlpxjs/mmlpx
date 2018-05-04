@@ -46,11 +46,6 @@
     "tslint-eslint-rules": "^4.1.1",
     "typescript": "^2.8.1"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
   "ava": {
     "files": "dist/lib/**/__tests__/**/*.js"
   }
