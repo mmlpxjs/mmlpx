@@ -29,6 +29,7 @@
     "lodash": "^4.17.4",
     "lru-cache": "^4.1.1",
     "mobx": "^3.4.1",
+    "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.0",
     "uuid": "^3.1.0"
   },

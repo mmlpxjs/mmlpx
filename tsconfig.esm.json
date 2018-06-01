@@ -6,7 +6,6 @@
 	"moduleResolution": "node"
   },
   "exclude": [
-	"**/__tests__/*.ts",
-	"**/fixtures/*.ts"
+	"**/__tests__/**"
   ]
 }

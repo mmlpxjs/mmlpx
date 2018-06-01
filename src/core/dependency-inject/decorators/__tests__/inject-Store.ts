@@ -67,3 +67,25 @@ test('inject store with dynamic params', t => {
 
 	t.is(controller.store.name, 'kuitos');
 });
+
+test('auto inject through field type definition', t => {
+
+	class UserStore {
+		age = 10;
+	}
+
+	class Controller {
+
+		name = 'kuitos';
+
+		@inject()
+		store: UserStore;
+	}
+
+	// eslint-disable-next-line no-unused-vars
+	const controller = new Controller();
+
+	t.is(controller.name, 'kuitos');
+	t.is(controller.store.age, 10);
+
+});
