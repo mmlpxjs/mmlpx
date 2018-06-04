@@ -1,25 +1,19 @@
 # mmlpx
 
-[![Build Status](https://img.shields.io/travis/mmlpxjs/mmlpx.svg?style=flat-square)](https://travis-ci.org/mmlpxjs/mmlpx)
 [![npm version](https://img.shields.io/npm/v/mmlpx.svg?style=flat-square)](https://www.npmjs.com/package/mmlpx)
-[![npm downloads](https://img.shields.io/npm/dt/mmlpx.svg?style=flat-square)](https://www.npmjs.com/package/mmlpx)
 [![coverage](https://img.shields.io/codecov/c/github/mmlpxjs/mmlpx.svg?style=flat-square)](https://codecov.io/gh/mmlpxjs/mmlpx)
+[![npm downloads](https://img.shields.io/npm/dt/mmlpx.svg?style=flat-square)](https://www.npmjs.com/package/mmlpx)
+[![Build Status](https://img.shields.io/travis/mmlpxjs/mmlpx.svg?style=flat-square)](https://travis-ci.org/mmlpxjs/mmlpx)
 
-mmlpx is abbreviation of **mobx model layer paradigm**
+mmlpx is abbreviation of **mobx model layer paradigm**, inspired by [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs)
 
-## Layers
-
-> ViewModel: page interaction logic, constructed and destroyed with the component lifecycle
->
-> Store: business logic and rules, singleton in a application
->
-> Loader: data accecssor for remote or local data fetching, converting the data structure to match definited model
+## Architecture
 
 ![](https://github.com/mmlpxjs/mmlpx/blob/gh-pages/assets/mmlpx.png?raw=true)
 
-## Example
+### Loader
 
-Loader
+Data accessor for remote or local data fetching, converting the data structure to match definited model
 
 ```ts
 class UserLoader {
@@ -33,7 +27,9 @@ class UserLoader {
 }
 ```
 
-Store
+### Store
+
+Business logic and rules, singleton in an application
 
 ```ts
 import { observable, action } from 'mobx';
@@ -57,7 +53,9 @@ class UserStore {
 }
 ```
 
-ViewModel
+### ViewModel
+
+Page interaction logic, constructed and destroyed with the component lifecycle
 
 ```ts
 import { observable, action } from 'mobx';
@@ -90,7 +88,7 @@ class AppViewModel {
 }
 ```
 
-Component
+### Component
 
 ```jsx
 export default App extends Component {
