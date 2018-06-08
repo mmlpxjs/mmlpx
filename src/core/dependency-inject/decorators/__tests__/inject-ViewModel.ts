@@ -98,8 +98,27 @@ test('inject viewModel with dynamic params', t => {
 
 });
 
+test('inject viewModel with dynamic params returned by a arrow function', t => {
+
+	class Controller {
+
+		name = 'kuitos';
+		age = 18;
+
+		@inject(ViewModelClass, (vm: Controller) => [vm.name, vm.age])
+		viewModel: any = null;
+	}
+
+	const controller = new Controller();
+
+	t.is(controller.viewModel.name, controller.name);
+	t.is(controller.viewModel.age, controller.age);
+
+});
+
 test('injected ViewModel instance should be independently with each other when be constructed repeatedly', t => {
 
+	// noinspection TsLint
 	class Controller {
 		name: string;
 		age: number;

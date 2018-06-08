@@ -15,7 +15,7 @@ export default function initialize<T extends IMmlpx<T>>(this: T, injector: Injec
 
 	// if the first argument is a function, we can initialize it with the invoker instance `this`
 	if (isFunction(args[0])) {
-		constructorParams = flatten([args[0].call(this)]);
+		constructorParams = flatten([args[0].call(this, this)]);
 	}
 
 	const name = ViewModel[modelNameSymbol];
