@@ -4,7 +4,6 @@
  * @since 2017-08-26
  */
 
-import { test } from 'ava';
 import { spy } from 'sinon';
 import inject from '../inject';
 import postConstruct from '../postConstruct';
@@ -14,7 +13,7 @@ let spyFn: any;
 let onInitSpy: any;
 let ViewModelClass: any = null;
 
-test.beforeEach(() => {
+beforeEach(() => {
 
 	spyFn = spy();
 	onInitSpy = spy();
@@ -40,9 +39,9 @@ test.beforeEach(() => {
 	ViewModelClass = Klass;
 });
 
-test('injected viewModel will only construct at initial period and postConstruct will exec after', t => {
+test('injected viewModel will only construct at initial period and postConstruct will exec after', () => {
 
-	t.is(spyFn.called, false);
+	expect(spyFn.called).toBe(false);
 
 	class Controller {
 		@inject(ViewModelClass)
@@ -50,17 +49,17 @@ test('injected viewModel will only construct at initial period and postConstruct
 	}
 
 	const controller = new Controller();
-	t.is(spyFn.called, false);
+	expect(spyFn.called).toBe(false);
 	// @see https://github.com/mobxjs/mobx/blob/master/src/utils/decorators.ts#L4
 	// tslint:disable-next-line
 	const unused = (controller.viewModel, controller.viewModel);
-	t.is(spyFn.called, true);
-	t.is(spyFn.callCount, 1);
-	t.is(onInitSpy.calledAfter(spyFn), true);
+	expect(spyFn.called).toBe(true);
+	expect(spyFn.callCount).toBe(1);
+	expect(onInitSpy.calledAfter(spyFn)).toBe(true);
 
 });
 
-test('inject viewModel with static params', t => {
+test('inject viewModel with static params', () => {
 
 	const name = 'kuitos';
 
@@ -72,20 +71,20 @@ test('inject viewModel with static params', t => {
 
 	const controller = new Controller();
 
-	t.is(controller.viewModel.name, name);
-	t.is(spyFn.calledWith(name), true);
-	t.is(onInitSpy.calledWith(name), true);
+	expect(controller.viewModel.name).toBe(name);
+	expect(spyFn.calledWith(name)).toBe(true);
+	expect(onInitSpy.calledWith(name)).toBe(true);
 
 });
 
-test('inject viewModel with dynamic params', t => {
+test('inject viewModel with dynamic params', () => {
 
 	class Controller {
 
 		name = 'kuitos';
 		age = 18;
 
-		@inject(ViewModelClass, function(this: any) {
+		@inject(ViewModelClass, function (this: any) {
 			return [this.name, this.age];
 		})
 		viewModel: any = null;
@@ -93,12 +92,12 @@ test('inject viewModel with dynamic params', t => {
 
 	const controller = new Controller();
 
-	t.is(controller.viewModel.name, controller.name);
-	t.is(controller.viewModel.age, controller.age);
+	expect(controller.viewModel.name).toBe(controller.name);
+	expect(controller.viewModel.age).toBe(controller.age);
 
 });
 
-test('inject viewModel with dynamic params returned by a arrow function', t => {
+test('inject viewModel with dynamic params returned by a arrow function', () => {
 
 	class Controller {
 
@@ -111,12 +110,12 @@ test('inject viewModel with dynamic params returned by a arrow function', t => {
 
 	const controller = new Controller();
 
-	t.is(controller.viewModel.name, controller.name);
-	t.is(controller.viewModel.age, controller.age);
+	expect(controller.viewModel.name).toBe(controller.name);
+	expect(controller.viewModel.age).toBe(controller.age);
 
 });
 
-test('injected ViewModel instance should be independently with each other when be constructed repeatedly', t => {
+test('injected ViewModel instance should be independently with each other when be constructed repeatedly', () => {
 
 	// noinspection TsLint
 	class Controller {
@@ -136,9 +135,9 @@ test('injected ViewModel instance should be independently with each other when b
 	const controllerA = new Controller('kuitos', 18);
 	const controllerB = new Controller('kuitosA', 20);
 
-	t.is(controllerA.viewModel.name, controllerA.name);
-	t.is(controllerA.viewModel.age, controllerA.age);
-	t.is(controllerB.viewModel.name, controllerB.name);
-	t.is(controllerB.viewModel.age, controllerB.age);
+	expect(controllerA.viewModel.name).toBe(controllerA.name);
+	expect(controllerA.viewModel.age).toBe(controllerA.age);
+	expect(controllerB.viewModel.name).toBe(controllerB.name);
+	expect(controllerB.viewModel.age).toBe(controllerB.age);
 
 });

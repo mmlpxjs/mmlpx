@@ -42,6 +42,7 @@
 	],
 	"max-classes-per-file": [true, 5, "exclude-class-expressions"],
 	"no-unused-expression": true,
-	"max-line-length": [true, 140]
+	"max-line-length": [true, 140],
+	"interface-over-type-literal": false
   }
 }

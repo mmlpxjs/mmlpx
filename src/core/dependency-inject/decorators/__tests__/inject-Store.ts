@@ -4,14 +4,13 @@
  * @since 2017-08-26
  */
 
-import { test } from 'ava';
 import inject from '../inject';
 import postConstruct from '../postConstruct';
 import Store from '../Store';
 
 let StoreClass: any = null;
 
-test.beforeEach(() => {
+beforeEach(() => {
 
 	@Store
 	class Klass {
@@ -29,7 +28,7 @@ test.beforeEach(() => {
 	StoreClass = Klass;
 });
 
-test('inject store with init params', t => {
+test('inject store with init params', () => {
 
 	class Controller {
 		@inject(StoreClass, 'kuitos')
@@ -43,12 +42,12 @@ test('inject store with init params', t => {
 	// eslint-disable-next-line no-unused-vars
 	const controller = new Controller();
 
-	t.is(controller.store.name, 'kuitos');
+	expect(controller.store.name).toBe('kuitos');
 	controller.changeStore();
-	t.is(controller.store.name, 'x');
+	expect(controller.store.name).toBe('x');
 });
 
-test('inject store with dynamic params', t => {
+test('inject store with dynamic params', () => {
 
 	function init(this: any) {
 		return [this.name];
@@ -65,10 +64,10 @@ test('inject store with dynamic params', t => {
 	// eslint-disable-next-line no-unused-vars
 	const controller = new Controller();
 
-	t.is(controller.store.name, 'kuitos');
+	expect(controller.store.name).toBe('kuitos');
 });
 
-test('auto inject through field type definition', t => {
+test('auto inject through field type definition', () => {
 
 	class UserStore {
 		age = 10;
@@ -85,7 +84,7 @@ test('auto inject through field type definition', t => {
 	// eslint-disable-next-line no-unused-vars
 	const controller = new Controller();
 
-	t.is(controller.name, 'kuitos');
-	t.is(controller.store.age, 10);
+	expect(controller.name).toBe('kuitos');
+	expect(controller.store.age).toBe(10);
 
 });

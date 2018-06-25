@@ -12,14 +12,14 @@ export const enum Scope {
 	Prototype = 'prototype',
 }
 
-export interface InjectionOptions {
+export type InjectionOptions = {
 	name?: string;
 	scope: Scope;
-}
+};
 
-export interface ISnapshot {
+export type Snapshot = {
 	[propName: string]: any;
-}
+};
 
 export interface IContainer<K, V> {
 
@@ -58,12 +58,17 @@ export default class Injector {
 				if (name) {
 
 					instance = container.get(name);
-					if (instance === undefined) {
+					if (!instance) {
 						instance = new InjectedClass(...args);
+						// only singleton injection will be stored
+						container.set(name, instance);
+					} else {
+						// if the prototype hadn't be set
+						if (Object.getPrototypeOf(instance) !== InjectedClass.prototype) {
+							Object.setPrototypeOf ? Object.setPrototypeOf(instance, InjectedClass.prototype) : instance.__proto__ = InjectedClass.prototype;
+						}
 					}
 
-					// only singleton injection will be stored
-					container.set(name, instance);
 					break;
 				}
 
@@ -72,16 +77,19 @@ export default class Injector {
 			case Scope.Prototype:
 				instance = new InjectedClass(...args);
 				break;
+
+			default:
+				throw new SyntaxError('You must set injected class as a mmlpx recognized model!');
 		}
 
 		return instance;
 	}
 
-	dump(): ISnapshot {
+	dump(): Snapshot {
 		return this.container.dump().reduce((acc, entry) => ({ ...acc, [entry.k]: entry.v }), {});
 	}
 
-	load(snapshot: ISnapshot) {
+	load(snapshot: Snapshot) {
 
 		const cacheArray: ReadonlyArray<LRUEntry<string, any>> = Object.keys(snapshot).map((k, e) => ({
 			k,

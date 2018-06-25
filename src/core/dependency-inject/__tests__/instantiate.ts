@@ -4,11 +4,10 @@
  * @since 2017-12-25
  */
 
-import { test } from 'ava';
 import instantiate from '../instantiate';
 import { IMmlpx, modelNameSymbol } from '../meta';
 
-test('default model instantiation is singleton', t => {
+test('default model instantiation is singleton', () => {
 
 	class Klass {
 		name = '';
@@ -24,8 +23,8 @@ test('default model instantiation is singleton', t => {
 
 	const cname = 'kuitos';
 	const klass = instantiate(MmlpxKlass, cname);
-	t.is(klass.name, cname);
+	expect(klass.name).toBe(cname);
 
 	const klass2 = instantiate(MmlpxKlass, cname);
-	t.is(klass, klass2);
+	expect(klass).toBe(klass2);
 });

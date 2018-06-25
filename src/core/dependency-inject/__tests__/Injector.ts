@@ -4,11 +4,9 @@
  * @since 2017/12/25
  */
 
-import { test } from 'ava';
-
 import Injector, { Scope } from '../Injector';
 
-test('dump all instance from container', t => {
+test('dump all instance from container', () => {
 
 	const injector = Injector.newInstance();
 
@@ -20,14 +18,14 @@ test('dump all instance from container', t => {
 		age = 18;
 	}
 
-	const klass = injector.get(Klass as any, { name: 'klass', scope: Scope.Singleton });
-	const klass1 = injector.get(Klass1 as any, { name: 'klass1', scope: Scope.Singleton });
+	const klass = injector.get(Klass, { name: 'klass', scope: Scope.Singleton });
+	const klass1 = injector.get(Klass1, { name: 'klass1', scope: Scope.Singleton });
 
 	const collection = injector.dump();
-	t.deepEqual(collection, { klass, klass1 });
+	expect({ klass, klass1 }).toEqual(collection);
 });
 
-test('load container from external', t => {
+test('load container from external', () => {
 
 	const snapshot = {
 		klass: { name: 'kuitos', age: 18 },
@@ -38,16 +36,25 @@ test('load container from external', t => {
 	injector.load(snapshot);
 
 	class Klass {
-		name = 'kuitos';
-		age = 18;
+		name: string;
+		age: number;
+
+		getName() {
+			return this.name;
+		}
+
+		getAge() {
+			return this.age;
+		}
+
 	}
 
-	const instance = injector.get<Klass>(Klass as any, { scope: Scope.Singleton, name: 'klass' });
-	t.is(instance.name, snapshot.klass.name);
-	t.is(instance.age, snapshot.klass.age);
+	const instance = injector.get(Klass, { scope: Scope.Singleton, name: 'klass' });
+	expect(instance.getName()).toBe(snapshot.klass.name);
+	expect(instance.getAge()).toBe(snapshot.klass.age);
 });
 
-test('singleton getting without a name will throw exception', t => {
+test('singleton getting without a name will throw exception', () => {
 
 	const injector = Injector.newInstance();
 
@@ -56,6 +63,6 @@ test('singleton getting without a name will throw exception', t => {
 		age = 18;
 	}
 
-	const error = t.throws(() => injector.get(Klass as any, { scope: Scope.Singleton }), SyntaxError);
-	t.is(error.message, 'A singleton injection must have a name!');
+	expect(() => injector.get(Klass, { scope: Scope.Singleton })).toThrow(SyntaxError);
+	expect(() => injector.get(Klass, { scope: Scope.Singleton })).toThrow('A singleton injection must have a name!');
 });
