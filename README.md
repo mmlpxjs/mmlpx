@@ -7,6 +7,16 @@
 
 mmlpx is abbreviation of **mobx model layer paradigm**, inspired by [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs)
 
+## Installation
+
+## Motivation
+
+## Usage
+
+### DI system
+
+### Time Travel
+
 ## Architecture
 
 ![](https://github.com/mmlpxjs/mmlpx/blob/gh-pages/assets/mmlpx.png?raw=true)
