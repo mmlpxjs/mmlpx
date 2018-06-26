@@ -17,3 +17,7 @@ export interface IMmlpx<T> extends Constructor<T> {
 	[modelTypeSymbol]: symbol;
 	[postConstructSymbol]?: (...args: any[]) => void;
 }
+
+export function getModelName<T>(model: IMmlpx<T>) {
+	return model[modelNameSymbol];
+}

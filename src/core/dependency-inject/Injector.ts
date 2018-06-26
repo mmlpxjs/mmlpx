@@ -5,6 +5,7 @@
  */
 
 import LRUCache, { LRUEntry } from 'lru-cache';
+import hydrate from './hydrate';
 import { Constructor } from './meta';
 
 export const enum Scope {
@@ -23,7 +24,7 @@ export type Snapshot = {
 
 export interface IContainer<K, V> {
 
-	set(key: K, value: V, maxAge?: number): boolean;
+	set(key: K, value: V, maxAge?: number): any;
 
 	get(key: K): V | undefined;
 
@@ -34,7 +35,7 @@ export interface IContainer<K, V> {
 
 export default class Injector {
 
-	private container: IContainer<string, any> = new LRUCache<string, any>();
+	private container: IContainer<string, any>;
 
 	private constructor(container?: IContainer<string, any>) {
 		this.container = container || new LRUCache<string, any>();
@@ -63,10 +64,7 @@ export default class Injector {
 						// only singleton injection will be stored
 						container.set(name, instance);
 					} else {
-						// if the prototype hadn't be set
-						if (Object.getPrototypeOf(instance) !== InjectedClass.prototype) {
-							Object.setPrototypeOf ? Object.setPrototypeOf(instance, InjectedClass.prototype) : instance.__proto__ = InjectedClass.prototype;
-						}
+						hydrate(instance, InjectedClass);
 					}
 
 					break;
