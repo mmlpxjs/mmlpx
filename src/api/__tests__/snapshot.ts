@@ -9,7 +9,7 @@ import Store from '../../core/dependency-inject/decorators/Store';
 import Injector from '../../core/dependency-inject/Injector';
 import { setInjector } from '../../core/dependency-inject/instantiate';
 import { getModelName } from '../../core/dependency-inject/meta';
-import { onSnapshot } from '../snapshot';
+import { onSnapshot, patch } from '../snapshot';
 
 @Store('ageStore')
 class AgeStore {
@@ -43,15 +43,13 @@ class Component {
 
 let component: Component;
 beforeEach(() => {
-	component = new Component();
 	setInjector(Injector.newInstance());
+	component = new Component();
 });
 
 describe('onSnapshot function', () => {
 
 	test('observable change should invoke onSnapshot listener', done => {
-
-		// setInjector(Injector.newInstance());
 
 		const disposer = onSnapshot(snapshot => {
 			expect(snapshot.ageStore.age).toBe(11);
@@ -84,10 +82,22 @@ describe('onSnapshot function', () => {
 
 });
 
-test('patch', () => {
-	// TODO
-});
+test('snapshot patcher should be merged to injector', () => {
 
-test('applySnapshot', () => {
-	// TODO
+	class ViewModel {
+		@inject()
+		ageStore: AgeStore;
+		@inject()
+		counterStore: CounterStore;
+	}
+
+	const vm = new ViewModel();
+	expect(vm.ageStore.age).toBe(10);
+	const patcher = {
+		counterStore: {
+			count: 20,
+		},
+	};
+	patch(patcher);
+	expect(vm.counterStore.count).toBe(20);
 });

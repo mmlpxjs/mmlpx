@@ -23,10 +23,14 @@ function walk(snapshot: Snapshot) {
 	return snapshot;
 }
 
+export function applySnapshot(snapshot: Snapshot, injector = getInjector()) {
+	injector.load(snapshot);
+}
+
 export function patch(patcher: Snapshot, injector = getInjector()) {
 	const currentSnapshot = getSnapshot(injector);
 	const mergedSnapshot = merge(currentSnapshot, patcher);
-	injector.load(mergedSnapshot);
+	applySnapshot(mergedSnapshot, injector);
 }
 
 export function getSnapshot(injector?: Injector): Snapshot;
@@ -39,10 +43,6 @@ export function getSnapshot(arg1: any, arg2?: any) {
 	} else {
 		return (arg1 || getInjector()).dump();
 	}
-}
-
-export function applySnapshot(snapshot: Snapshot, injector = getInjector()) {
-	injector.load(snapshot);
 }
 
 export function onSnapshot(onChange: (snapshot: Snapshot) => void, injector?: Injector): IReactionDisposer;

@@ -29,7 +29,7 @@ test('load container from external', () => {
 
 	const snapshot = {
 		klass: { name: 'kuitos', age: 18 },
-		klass1: { age: 18 },
+		klass1: { age: 10 },
 	};
 
 	const injector = Injector.newInstance();
@@ -50,8 +50,10 @@ test('load container from external', () => {
 	}
 
 	const instance = injector.get(Klass, { scope: Scope.Singleton, name: 'klass' });
+	const instance1 = injector.get(Klass, { scope: Scope.Singleton, name: 'klass1' });
 	expect(instance.getName()).toBe(snapshot.klass.name);
 	expect(instance.getAge()).toBe(snapshot.klass.age);
+	expect(instance1.getAge()).toBe(snapshot.klass1.age);
 });
 
 test('singleton getting without a name will throw exception', () => {

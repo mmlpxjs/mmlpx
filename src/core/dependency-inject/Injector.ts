@@ -89,10 +89,10 @@ export default class Injector {
 
 	load(snapshot: Snapshot) {
 
-		const cacheArray: ReadonlyArray<LRUEntry<string, any>> = Object.keys(snapshot).map((k, e) => ({
+		const cacheArray: ReadonlyArray<LRUEntry<string, any>> = Object.keys(snapshot).map(k => ({
 			k,
 			v: snapshot[k],
-			e,
+			e: 0,
 		}));
 
 		this.container.load(cacheArray);
