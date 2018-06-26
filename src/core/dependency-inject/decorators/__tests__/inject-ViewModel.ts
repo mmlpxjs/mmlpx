@@ -84,7 +84,7 @@ test('inject viewModel with dynamic params', () => {
 		name = 'kuitos';
 		age = 18;
 
-		@inject(ViewModelClass, function (this: any) {
+		@inject(ViewModelClass, function(this: any) {
 			return [this.name, this.age];
 		})
 		viewModel: any = null;

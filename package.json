@@ -20,7 +20,7 @@
     "prepush": "npm run lint",
     "test": "jest --coverage",
     "codecov": "codecov",
-    "lint": "tslint 'src/**/*.ts' & npm test"
+    "lint": "tslint 'src/**/*.ts' && npm test"
   },
   "dependencies": {
     "lodash": "^4.17.4",

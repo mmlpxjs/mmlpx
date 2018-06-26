@@ -40,7 +40,7 @@
 		]
 	  }
 	],
-	"max-classes-per-file": [true, 5, "exclude-class-expressions"],
+	"max-classes-per-file": [true, 7, "exclude-class-expressions"],
 	"no-unused-expression": true,
 	"max-line-length": [true, 140],
 	"interface-over-type-literal": false
