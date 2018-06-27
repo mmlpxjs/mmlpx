@@ -22,20 +22,26 @@ export type Snapshot = {
 	[propName: string]: any;
 };
 
+export type Entry<K, V> = {
+	k: K;
+	v: V;
+	e?: number;
+};
+
 export interface IContainer<K, V> {
 
-	set(key: K, value: V, maxAge?: number): any;
+	set(key: K, value: V): boolean;
 
 	get(key: K): V | undefined;
 
-	dump(): Array<LRUEntry<K, V>>;
+	dump(): Array<Entry<K, V>>;
 
-	load(cacheEntries: ReadonlyArray<LRUEntry<K, V>>): void;
+	load(cacheEntries: ReadonlyArray<Entry<K, V>>): void;
 }
 
 export default class Injector {
 
-	private container: IContainer<string, any>;
+	private readonly container: IContainer<string, any>;
 
 	private constructor(container?: IContainer<string, any>) {
 		this.container = container || new LRUCache<string, any>();
@@ -43,6 +49,10 @@ export default class Injector {
 
 	static newInstance(container?: IContainer<string, any>) {
 		return new Injector(container);
+	}
+
+	getContainer() {
+		return this.container;
 	}
 
 	get<T>(InjectedClass: Constructor<T>, options: InjectionOptions, ...args: any[]): T {

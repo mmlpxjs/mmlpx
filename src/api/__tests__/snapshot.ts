@@ -6,7 +6,7 @@
 import { action, observable, runInAction } from 'mobx';
 import inject from '../../core/dependency-inject/decorators/inject';
 import Store from '../../core/dependency-inject/decorators/Store';
-import Injector from '../../core/dependency-inject/Injector';
+import Injector, { Entry, IContainer } from '../../core/dependency-inject/Injector';
 import { setInjector } from '../../core/dependency-inject/instantiate';
 import { getModelName } from '../../core/dependency-inject/meta';
 import { onSnapshot, patch } from '../snapshot';
@@ -77,6 +77,50 @@ describe('onSnapshot function', () => {
 		});
 
 		runInAction(() => component.ageStore.increase());
+		disposer();
+	});
+
+	test('self constructed injector without lruCache should be convert to reactive automatically', done => {
+
+		class Container implements IContainer<string, any> {
+
+			private container = new Map();
+
+			set(key: string, value: any): any {
+				return this.container.set(key, value);
+			}
+
+			get(key: string): any {
+				return this.container.get(key);
+			}
+
+			dump(): Array<Entry<string, any>> {
+				return Array.from(this.container.entries()).map(entry => {
+					return { k: entry[0], v: entry[1] };
+				});
+			}
+
+			load(cacheEntries: ReadonlyArray<Entry<string, any>>): void {
+				this.container.clear();
+				cacheEntries.forEach(entry => {
+					this.container.set(entry.k, entry.v);
+				});
+			}
+		}
+
+		setInjector(Injector.newInstance(new Container()));
+
+		const disposer = onSnapshot(snapshot => {
+			expect(snapshot.ageStore.age).toBe(11);
+			expect(snapshot.counterStore.count).toBe(1);
+			done();
+		});
+
+		runInAction(() => {
+			component.ageStore.increase();
+			component.counterStore.increase();
+		});
+
 		disposer();
 	});
 

@@ -3,12 +3,54 @@
  * @homepage https://github.com/kuitos/
  * @since 2018-06-26 17:06
  */
-
-import LRU from 'lru-cache';
-import { action, observable } from 'mobx';
-import Injector, { IContainer } from '../core/dependency-inject/Injector';
+import { isFunction } from 'lodash';
+import { action, observable, ObservableMap } from 'mobx';
+import Injector, { Entry, IContainer } from '../core/dependency-inject/Injector';
 
 const reactiveInjectorSymbol = Symbol('reactiveInjector');
+
+function isMapLike(duck: any) {
+	return duck && isFunction(duck.set) && isFunction(duck.get) && isFunction(duck.has) && isFunction(duck.clear);
+}
+
+function getLRUCacheSymbol(container: IContainer<string, any>) {
+	return Object.getOwnPropertySymbols(container).find(symbol => isMapLike((container as any)[symbol]));
+}
+
+class ReactiveContainer implements IContainer<string, any> {
+
+	@observable
+	private container = new Map<string, any>();
+
+	@action
+	set(key: string, value: any) {
+		try {
+			this.container.set(key, value);
+			return true;
+		} catch (e) {
+			console.error(e);
+			return false;
+		}
+	}
+
+	get(key: string): any {
+		return this.container.get(key);
+	}
+
+	dump() {
+		return Array.from(this.container.entries()).map(entry => {
+			return { k: entry[0], v: entry[1] };
+		});
+	}
+
+	@action
+	load(cacheEntries: ReadonlyArray<Entry<string, any>>): void {
+		this.container.clear();
+		cacheEntries.forEach(entry => {
+			this.container.set(entry.k, entry.v);
+		});
+	}
+}
 
 export default function genReactiveInjector(prevInjector: Injector) {
 
@@ -16,48 +58,40 @@ export default function genReactiveInjector(prevInjector: Injector) {
 		return prevInjector;
 	}
 
-	// TODO use Object.getOwnPropertySymbols to rewrite this[CacheSymbol] thus we can leverage lruCache
+	let newInjector = prevInjector;
 
-	class Container implements IContainer<string, any> {
+	/*
+	 * if the injector has an LRUCache based container, we can hijack it and made the underlying map to be a reactive map
+	 * otherwise we need to construct a reactive container
+	 */
+	const container: any = prevInjector.getContainer();
+	const cacheSymbol = getLRUCacheSymbol(container);
+	if (cacheSymbol) {
 
-		@observable
-		private container = new Map<string, any>();
+		const { reset: originalReset, dump: originalDump } = container;
 
-		@action
-		set(key: string, value: any) {
-			// TODO should not notify listeners
-			return this.container.set(key, value);
-		}
+		container.reset = (...args: any[]) => {
+			// lru cache construct map when it resetting
+			// @see https://github.com/isaacs/node-lru-cache/blob/master/index.js#L201
+			originalReset.apply(container, args);
+			container[cacheSymbol] = new ObservableMap();
+		};
 
-		get(key: string): any {
-			return this.container.get(key);
-		}
+		container.dump = (...args: any[]) => {
+			// :dark magic: access container map size thus snapshot will reactive with ObservableMap when its setting
+			// noinspection TsLint
+			(container[cacheSymbol].size);
+			return originalDump.apply(container, args);
+		};
 
-		dump(): Array<LRU.LRUEntry<string, any>> {
-			return Array.from(this.container.entries()).map((entry, index) => {
-				return { k: entry[0], v: entry[1], e: index };
-			});
-		}
+	} else {
 
-		load(cacheEntries: ReadonlyArray<LRU.LRUEntry<string, any>>): void {
-			this.container.clear();
-			cacheEntries.forEach(entry => {
-				this.container.set(entry.k, entry.v);
-			});
-		}
+		const reactiveContainer = new ReactiveContainer();
+		newInjector = Injector.newInstance(reactiveContainer);
 	}
 
 	const snapshot = prevInjector.dump();
-	const entries = Object.keys(snapshot).map((k, e) => {
-		return {
-			k,
-			v: snapshot[k],
-			e,
-		};
-	});
-	const reactiveContainer = new Container();
-	reactiveContainer.load(entries);
-	const newInjector = Injector.newInstance(reactiveContainer);
-	(newInjector as any)[reactiveInjectorSymbol] = true;
-	return newInjector;
+	newInjector!.load(snapshot);
+	(newInjector! as any)[reactiveInjectorSymbol] = true;
+	return newInjector!;
 }
