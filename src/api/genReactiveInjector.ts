@@ -79,7 +79,7 @@ export default function genReactiveInjector(prevInjector: Injector) {
 
 		container.dump = (...args: any[]) => {
 			// :dark magic: access container map size thus snapshot will reactive with ObservableMap when its setting
-			// noinspection TsLint
+			// tslint:disable-next-line
 			(container[cacheSymbol].size);
 			return originalDump.apply(container, args);
 		};

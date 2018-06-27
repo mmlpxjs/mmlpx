@@ -10,6 +10,7 @@ import Store from './core/dependency-inject/decorators/Store';
 import ViewModel from './core/dependency-inject/decorators/ViewModel';
 import instantiate from './core/dependency-inject/instantiate';
 
+export { onSnapshot, patch, applySnapshot, getSnapshot } from './api/snapshot';
 export { modelNameSymbol } from './core/dependency-inject/meta';
 
 export {
