@@ -68,3 +68,15 @@ test('singleton getting without a name will throw exception', () => {
 	expect(() => injector.get(Klass, { scope: Scope.Singleton })).toThrow(SyntaxError);
 	expect(() => injector.get(Klass, { scope: Scope.Singleton })).toThrow('A singleton injection must have a name!');
 });
+
+test('getting without a recognized scope type will throw exception', () => {
+	const injector = Injector.newInstance();
+
+	class Klass {
+		name = 'kuitos';
+		age = 18;
+	}
+
+	expect(() => injector.get(Klass, { scope: '' } as any)).toThrow(SyntaxError);
+	expect(() => injector.get(Klass, { scope: '' } as any)).toThrow('You must set injected class as a mmlpx recognized model!');
+});

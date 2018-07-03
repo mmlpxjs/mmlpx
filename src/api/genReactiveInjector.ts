@@ -3,18 +3,18 @@
  * @homepage https://github.com/kuitos/
  * @since 2018-06-26 17:06
  */
-import { isFunction } from 'lodash';
 import { action, observable, ObservableMap, runInAction } from 'mobx';
 import Injector, { Entry, IContainer } from '../core/dependency-inject/Injector';
+import { isMap } from '../utils/types';
 
 const reactiveInjectorSymbol = Symbol('reactiveInjector');
 
-function isMapLike(duck: any) {
-	return duck && isFunction(duck.set) && isFunction(duck.get) && isFunction(duck.has) && isFunction(duck.clear);
+interface IReactiveInjector extends Injector {
+	[reactiveInjectorSymbol]: boolean;
 }
 
 function getLRUCacheSymbol(container: IContainer<string, any>) {
-	return Object.getOwnPropertySymbols(container).find(symbol => isMapLike((container as any)[symbol]));
+	return Object.getOwnPropertySymbols(container).find(symbol => isMap((container as any)[symbol]));
 }
 
 class ReactiveContainer implements IContainer<string, any> {
@@ -52,9 +52,9 @@ class ReactiveContainer implements IContainer<string, any> {
 	}
 }
 
-export default function genReactiveInjector(prevInjector: Injector) {
+export default function genReactiveInjector(prevInjector: IReactiveInjector) {
 
-	if ((prevInjector as any)[reactiveInjectorSymbol]) {
+	if (prevInjector[reactiveInjectorSymbol]) {
 		return prevInjector;
 	}
 
@@ -102,11 +102,11 @@ export default function genReactiveInjector(prevInjector: Injector) {
 	} else {
 
 		const reactiveContainer = new ReactiveContainer();
-		newInjector = Injector.newInstance(reactiveContainer);
+		newInjector = Injector.newInstance(reactiveContainer) as IReactiveInjector;
 	}
 
 	const snapshot = prevInjector.dump();
-	newInjector!.load(snapshot);
-	(newInjector! as any)[reactiveInjectorSymbol] = true;
+	newInjector.load(snapshot);
+	newInjector[reactiveInjectorSymbol] = true;
 	return newInjector!;
 }

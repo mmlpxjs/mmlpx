@@ -4,16 +4,12 @@
  * @since 2018-06-25 17:01
  */
 
-import { isArrayLikeObject, isFunction, mergeWith, pull } from 'lodash';
+import { mergeWith, pull } from 'lodash';
 import { _getGlobalState, comparer, IReactionDisposer, reaction, runInAction } from 'mobx';
 import Injector, { Snapshot } from '../core/dependency-inject/Injector';
 import { getInjector, setInjector } from '../core/dependency-inject/instantiate';
+import { isArray, isMap, isObject } from '../utils/types';
 import genReactiveInjector from './genReactiveInjector';
-
-const isObject = (obj: any) => Object.prototype.toString.call(obj) === '[object Object]';
-const isMap = (obj: any) => Object.prototype.toString.call(obj) === '[object Map]' ||
-	(obj && isFunction(obj.entries) && isFunction(obj.get) && isFunction(obj.set));
-const isArray = (obj: any) => obj && (Array.isArray(obj) || isArrayLikeObject(obj));
 
 enum SNAPSHOT_PHASE {
 	PATCHING,
@@ -23,20 +19,22 @@ enum SNAPSHOT_PHASE {
 let phase = SNAPSHOT_PHASE.DONE;
 
 /**
- * serialize and walk the snapshot of injector
- * @param snapshot
+ * serialize and deep walk the models of injector to enable the dependencies tracking
+ * @param model
  * @returns {Snapshot} serialization
  */
-function serialize(snapshot: any) {
+function serialize(model: any) {
 
-	if (isArray(snapshot)) {
-		return snapshot.length ? snapshot.map((value: any) => serialize(value)) : [];
+	// when model is an array, access the array length to enable tracking
+	if (isArray(model)) {
+		return model.length ? model.map((value: any) => serialize(value)) : [];
 	}
 
-	if (isMap(snapshot)) {
-		if (snapshot.size) {
+	// when model is a map, access the map size to enable tracking
+	if (isMap(model)) {
+		if (model.size) {
 			const map: any = {};
-			snapshot.forEach((value: any, key: string) => {
+			model.forEach((value: any, key: string) => {
 				map[key] = serialize(value);
 			});
 			return map;
@@ -44,19 +42,27 @@ function serialize(snapshot: any) {
 		return {};
 	}
 
-	if (isObject(snapshot)) {
+	if (isObject(model)) {
 
-		return Object.keys(snapshot).reduce((acc, stateName) => {
-			acc[stateName] = serialize(snapshot[stateName]);
+		return Object.keys(model).reduce((acc, stateName) => {
+			acc[stateName] = serialize(model[stateName]);
 			return acc;
 		}, {} as Snapshot);
 	}
 
-	return snapshot;
+	return model;
 }
 
+/**
+ * hijack the mobx global state to run a processor after all reactions finished
+ * @see https://github.com/mobxjs/mobx/blob/master/src/core/reaction.ts#L242
+ * :dark magic:
+ * @param {() => void} processor
+ */
 function processAfterReactionsFinished(processor: () => void) {
-	const globalState = _getGlobalState();
+	// compatible with mobx 3
+	const getGlobalState = _getGlobalState || require('mobx').extras.getGlobalState;
+	const globalState = getGlobalState();
 	const previousDescriptor = Object.getOwnPropertyDescriptor(globalState, 'isRunningReactions');
 	let prevValue: boolean = globalState.isRunningReactions;
 	Object.defineProperty(globalState, 'isRunningReactions', {
