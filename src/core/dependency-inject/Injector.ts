@@ -74,7 +74,12 @@ export default class Injector {
 						// only singleton injection will be stored
 						container.set(name, instance);
 					} else {
-						hydrate(instance, InjectedClass);
+						const hydration = hydrate(instance, InjectedClass, ...args);
+						// when the stored instance is deserialized object(from snapshot), we need to restore the hydration instance
+						if (hydration !== instance) {
+							instance = hydration;
+							container.set(name, hydration);
+						}
 					}
 
 					break;

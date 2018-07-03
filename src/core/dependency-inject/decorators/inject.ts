@@ -5,6 +5,7 @@
  */
 
 import 'reflect-metadata';
+import hydrate from '../hydrate';
 import instantiate from '../instantiate';
 import { Constructor } from '../meta';
 
@@ -33,7 +34,7 @@ export default <T>(InjectedClass?: Constructor<T>, ...args: any[]): any => (targ
 				return initializedValue;
 
 			} else {
-				return this[symbol];
+				return hydrate(this[symbol], InjectedClass!, ...args);
 			}
 		},
 		// @formatter:off

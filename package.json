@@ -7,8 +7,8 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./esm/index.js",
+  "types": "./esm/index.d.ts",
   "sideEffects": false,
-  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "npm run tsc:build && npm run optimize",
     "tsc:build": "rm -fr dist && tsc -p tsconfig.esm.json && cp -R dist/esm dist/lib",

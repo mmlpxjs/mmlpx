@@ -4,7 +4,7 @@
  * @since 2018-06-26 17:06
  */
 import { isFunction } from 'lodash';
-import { action, observable, ObservableMap } from 'mobx';
+import { action, observable, ObservableMap, runInAction } from 'mobx';
 import Injector, { Entry, IContainer } from '../core/dependency-inject/Injector';
 
 const reactiveInjectorSymbol = Symbol('reactiveInjector');
@@ -61,24 +61,39 @@ export default function genReactiveInjector(prevInjector: Injector) {
 	let newInjector = prevInjector;
 
 	/*
-	 * if the injector has an LRUCache based container, we can hijack it and made the underlying map to be a reactive map
-	 * otherwise we need to construct a reactive container
+	 * if the injector has an LRUCache based container, we can hijack it and made the underlying map to be a reactive map,
+	 * and keep the lru features
+	 * otherwise we need to construct a simple-ObservableMap-based reactive container
 	 */
 	const container: any = prevInjector.getContainer();
 	const cacheSymbol = getLRUCacheSymbol(container);
 	if (cacheSymbol) {
 
-		const { reset: originalReset, dump: originalDump } = container;
+		const { dump: originalDump, set: originalSet } = container;
 
-		container.reset = (...args: any[]) => {
-			// lru cache construct map when it resetting
-			// @see https://github.com/isaacs/node-lru-cache/blob/master/index.js#L201
-			originalReset.apply(container, args);
-			container[cacheSymbol] = new ObservableMap();
+		const originalMap = container[cacheSymbol];
+		const observableMap = originalMap instanceof ObservableMap ? originalMap : new ObservableMap();
+		// hijack the map assignment to replace it by a ObservableMap
+		// @see https://github.com/isaacs/node-lru-cache/blob/master/index.js#L201
+		Object.defineProperty(container, cacheSymbol, {
+			set() {
+				// should clear the map rather than reassign it to a new one, what will lose the reactive observation
+				runInAction(() => observableMap.clear());
+			},
+			get() {
+				return observableMap;
+			},
+		});
+
+		// wrap observable map setting into action
+		container.set = (...args: any[]) => {
+			let result = false;
+			runInAction(() => result = originalSet.apply(container, args));
+			return result;
 		};
 
 		container.dump = (...args: any[]) => {
-			// :dark magic: access container map size thus snapshot will reactive with ObservableMap when its setting
+			// :dark magic: access container map size thus snapshot will reactive with ObservableMap when its setting(via getSnapshot invocation)
 			// tslint:disable-next-line
 			(container[cacheSymbol].size);
 			return originalDump.apply(container, args);
