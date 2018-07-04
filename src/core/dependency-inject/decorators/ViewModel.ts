@@ -5,8 +5,8 @@
  */
 
 import { isString } from 'lodash';
+import namedModelDecorator from '../../../utils/namedModelDecorator';
 import { modelTypeSymbol, viewModelSymbol } from '../meta';
-import namedModelDecorator from './namedModelDecorator';
 
 export default (arg1: any) => {
 

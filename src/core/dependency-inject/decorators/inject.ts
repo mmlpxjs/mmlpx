@@ -18,7 +18,7 @@ export default <T>(InjectedClass?: Constructor<T>, ...args: any[]): any => (targ
 		/* istanbul ignore next */
 		if (!InjectedClass) {
 			throw new SyntaxError('You must pass a Class for injection while you are not using typescript!' +
-				'Or you need add "emitDecoratorMetadata: true" configuration to your tsconfig.json');
+				'Or you may need to add "emitDecoratorMetadata: true" configuration to your tsconfig.json');
 		}
 	}
 

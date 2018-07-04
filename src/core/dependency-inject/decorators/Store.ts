@@ -6,8 +6,8 @@
 
 import { isString } from 'lodash';
 import { v4 } from 'uuid';
+import namedModelDecorator from '../../../utils/namedModelDecorator';
 import { storeSymbol } from '../meta';
-import namedModelDecorator from './namedModelDecorator';
 
 export default (arg1: any) => {
 

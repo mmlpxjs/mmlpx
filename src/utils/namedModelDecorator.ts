@@ -4,7 +4,7 @@
  * @since 2017-12-19
  */
 
-import { modelNameSymbol, modelTypeSymbol } from '../meta';
+import { modelNameSymbol, modelTypeSymbol } from '../core/dependency-inject/meta';
 
 export default function namedModelDecorator(name: string, type: symbol): ClassDecorator {
 
