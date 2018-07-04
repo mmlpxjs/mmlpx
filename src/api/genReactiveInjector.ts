@@ -28,7 +28,9 @@ class ReactiveContainer implements IContainer<string, any> {
 			this.container.set(key, value);
 			return true;
 		} catch (e) {
+			/* istanbul ignore next */
 			console.error(e);
+			/* istanbul ignore next */
 			return false;
 		}
 	}
@@ -92,11 +94,11 @@ export default function genReactiveInjector(prevInjector: IReactiveInjector) {
 			return result;
 		};
 
-		container.dump = (...args: any[]) => {
+		container.dump = () => {
 			// :dark magic: access container map size thus snapshot will reactive with ObservableMap when its setting(via getSnapshot invocation)
 			// tslint:disable-next-line
 			(container[cacheSymbol].size);
-			return originalDump.apply(container, args);
+			return originalDump.apply(container);
 		};
 
 	} else {

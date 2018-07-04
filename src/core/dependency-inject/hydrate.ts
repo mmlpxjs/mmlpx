@@ -16,14 +16,14 @@ export default function hydrate<T>(instance: T, Host: Constructor<T>, ...args: a
 		// awake the reactive system of the model
 		Object.keys(instance).forEach((key: string) => {
 			if (real[key] instanceof ObservableMap) {
-				const { name, enhancer } = real[key] as ObservableMap;
+				const { name, enhancer } = real[key];
 				runInAction(() => real[key] = new ObservableMap((instance as any)[key], enhancer, name));
 			} else {
 				runInAction(() => real[key] = (instance as any)[key]);
 			}
 		});
 
-		return real;
+		return real as T;
 	}
 
 	return instance;

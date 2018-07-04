@@ -61,7 +61,7 @@ function serialize(model: any) {
  */
 function processAfterReactionsFinished(processor: () => void) {
 	// compatible with mobx 3
-	const getGlobalState = _getGlobalState || require('mobx').extras.getGlobalState;
+	const getGlobalState = _getGlobalState || /* istanbul ignore next */ require('mobx').extras.getGlobalState;
 	const globalState = getGlobalState();
 	const previousDescriptor = Object.getOwnPropertyDescriptor(globalState, 'isRunningReactions');
 	let prevValue: boolean = globalState.isRunningReactions;
