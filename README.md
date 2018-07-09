@@ -182,25 +182,9 @@ Notice
    <img src="https://github.com/mmlpxjs/mmlpx/blob/gh-pages/assets/mmlpx.png?raw=true">
 </div>
 
-### Loader
-
-Data accessor for remote or local data fetching, converting the data structure to match definited models.
-
-```ts
-class UserLoader {
-    async getUsers() {
-        const users = await this.http.get<User[]>('/users');
-        return users.map(user => ({
-            name: user.userName,
-            age: user.userAge,
-        }))
-    }
-}
-```
-
 ### Store
 
-Business logic and rules definition, equate to the model in [mvvm architecture](https://msdn.microsoft.com/en-us/library/hh848246.aspx), singleton in an application. Also it known as domain object in [DDD](https://en.wikipedia.org/wiki/Domain-driven_design). And Store always represent the single source of truth of the application.
+Business logic and rules definition, equate to the model in [mvvm architecture](https://msdn.microsoft.com/en-us/library/hh848246.aspx), singleton in an application. Also known as domain object in [DDD](https://en.wikipedia.org/wiki/Domain-driven_design), always represent the single source of truth of the application.
 
 ```ts
 import { observable, action } from 'mobx';
@@ -224,7 +208,9 @@ class UserStore {
 
 ### ViewModel
 
-Page interaction logic definition, live around the component lifecycle,  `ViewModel` instance can not be stored in ioc container. Besides the UI-domain local states, others states are derived from `Store` via `@computed` in `ViewModel`. 
+Page interaction logic definition, live around the component lifecycle,  `ViewModel` instance can not be stored in ioc container. 
+
+The only one direct consumer of `Store`, besides the UI-domain/local states, others are derived from `Store` via `@computed` in `ViewModel`. 
 
 The global states mutation are resulted by store **command** invocation from `ViewModel`, and the separated **queries** are represented by transparent subscriptions with `computed` decorator.
 
@@ -253,6 +239,22 @@ class AppViewModel {
     async onInit() {
         await this.userStore.loadUsers();
         this.setLoading(false);
+    }
+}
+```
+
+### Loader
+
+Data accessor for remote or local data fetching, converting the data structure to match definited models.
+
+```ts
+class UserLoader {
+    async getUsers() {
+        const users = await this.http.get<User[]>('/users');
+        return users.map(user => ({
+            name: user.userName,
+            age: user.userAge,
+        }))
     }
 }
 ```
