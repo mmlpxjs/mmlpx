@@ -5,7 +5,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/mmlpx.svg?style=flat-square)](https://www.npmjs.com/package/mmlpx)
 [![Build Status](https://img.shields.io/travis/mmlpxjs/mmlpx.svg?style=flat-square)](https://travis-ci.org/mmlpxjs/mmlpx)
 
-mmlpx is abbreviation of **mobx model layer paradigm**, inspired by [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) and [Android Architecture Components](https://developer.android.google.cn/topic/libraries/architecture/), aims to provide a mobx-based generic layered architecture in single page application.
+mmlpx is abbreviation of **mobx model layer paradigm**, inspired by [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) and [Android Architecture Components](https://developer.android.google.cn/topic/libraries/architecture/), aims to provide a mobx-based generic layered architecture for single page application.
 
 ## Installation
 
@@ -148,6 +148,10 @@ class App extends Component {
 
 ### Time Travelling
 
+<div align="center">
+   <img src="https://github.com/mmlpxjs/mmlpx-todomvc/blob/master/todomvc.gif?raw=true">
+</div>
+
 Benefit from the power of model managment by di system, mmlpx supported time travelling out of box.
 
 All you need are the three apis: `getSnapshot`, `applySnapshot` and `onSnapshot`.
@@ -172,13 +176,7 @@ class UserStore {}
 
 Fortunately mmlpx had provided [ts-plugin-mmlpx](https://github.com/mmlpxjs/ts-plugin-mmlpx) to generate store name automatically, you needn't to named your stores manually.
 
-<div align="center">
-   <img src="https://github.com/mmlpxjs/mmlpx-todomvc/blob/master/todomvc.gif?raw=true">
-</div>
-
 You can check the [mmlpx-todomvc redo/undo demo](https://mmlpxjs.github.io/mmlpx-todomvc) and the [demo source code](https://github.com/mmlpxjs/mmlpx-todomvc/blob/master/src/containers/TodoApp/ViewModel.ts#L124) for details.
-
-Notice
 
 ## Layered Architecture Overview
 
