@@ -23,11 +23,11 @@ let phase = SNAPSHOT_PHASE.DONE;
  * @param model
  * @returns {Snapshot} serialization
  */
-function serialize(model: any) {
+function walkAndSerialize(model: any) {
 
 	// when model is an array, access the array length to enable tracking
 	if (isArray(model)) {
-		return model.length ? model.map((value: any) => serialize(value)) : [];
+		return model.length ? model.map((value: any) => walkAndSerialize(value)) : [];
 	}
 
 	// when model is a map, access the map size to enable tracking
@@ -35,7 +35,7 @@ function serialize(model: any) {
 		if (model.size) {
 			const map: any = {};
 			model.forEach((value: any, key: string) => {
-				map[key] = serialize(value);
+				map[key] = walkAndSerialize(value);
 			});
 			return map;
 		}
@@ -45,7 +45,7 @@ function serialize(model: any) {
 	if (isObject(model)) {
 
 		return Object.keys(model).reduce((acc, stateName) => {
-			acc[stateName] = serialize(model[stateName]);
+			acc[stateName] = walkAndSerialize(model[stateName]);
 			return acc;
 		}, {} as Snapshot);
 	}
@@ -127,10 +127,10 @@ export function getSnapshot(modelName: string, injector?: Injector): Snapshot;
 export function getSnapshot(arg1: any, arg2?: any) {
 
 	if (typeof arg1 === 'string') {
-		const snapshot = serialize((arg2 || getInjector()).dump());
+		const snapshot = walkAndSerialize((arg2 || getInjector()).dump());
 		return snapshot[arg1];
 	} else {
-		return serialize((arg1 || getInjector()).dump());
+		return walkAndSerialize((arg1 || getInjector()).dump());
 	}
 }
 
