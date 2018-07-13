@@ -83,11 +83,13 @@ mmlpx DI system was deep inspired by [spring ioc](https://docs.spring.io/spring-
 
 ```ts
 import { inject, ViewModel, Store } from 'mmlpx';
+
 @Store
-class Store {}
+class UserStore {}
+
 @ViewModel
 class AppViewModel {
-	@inject() store: Store;
+    @inject() userStore: UserStore;
 }
 ```
 
@@ -97,11 +99,13 @@ Due to we leverage the metadata description ability of typescript, you need to m
 
 ```js
 import { inject, ViewModel, Store } from 'mmlpx';
+
 @Store
-class Store {}
+class UserStore {}
+
 @ViewModel
 class AppViewModel {
-	@inject(Store) store;
+    @inject(UserStore) userStore;
 }
 ```
 
