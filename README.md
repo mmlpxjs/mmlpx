@@ -5,7 +5,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/mmlpx.svg?style=flat-square)](https://www.npmjs.com/package/mmlpx)
 [![Build Status](https://img.shields.io/travis/mmlpxjs/mmlpx.svg?style=flat-square)](https://travis-ci.org/mmlpxjs/mmlpx)
 
-mmlpx is abbreviation of **mobx model layer paradigm**, inspired by [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) and [Android Architecture Components](https://developer.android.google.cn/topic/libraries/architecture/), aims to provide a mobx-based generic layered architecture for single page application.
+mmlpx is an abbreviation of **mobx model layer paradigm**, inspired by [CQRS](https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs) and [Android Architecture Components](https://developer.android.google.cn/topic/libraries/architecture/), aims to provide a mobx-based generic layered architecture for single page application.
 
 ## Installation
 
@@ -75,7 +75,7 @@ class App extends Component {
 
 ### DI System
 
-It is well known that MobX is an value-based reactive system which lean to oop paradigm, and we defined our states with a class facade usually. To avoid constructing the instance everytime we used and to enjoy the other benifit(unit test and so on), [di](https://en.wikipedia.org/wiki/Dependency_injection) system is the spontaneous choice.
+It is well known that MobX is an value-based reactive system which lean to oop paradigm, and we defined our states with a class facade usually. To avoid constructing the instance everytime we used and to enjoy the other benifit (unit test and so on), a [di](https://en.wikipedia.org/wiki/Dependency_injection) system is the spontaneous choice.
 
 mmlpx DI system was deep inspired by [spring ioc](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans).
 
