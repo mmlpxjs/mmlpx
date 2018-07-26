@@ -178,7 +178,7 @@ As we need to serialize the stores to persistent object, and active stores with 
 class UserStore {}
 ```
 
-Fortunately mmlpx had provided [ts-plugin-mmlpx](https://github.com/mmlpxjs/ts-plugin-mmlpx) to generate store name automatically, you needn't to named your stores manually.
+Fortunately mmlpx had provided [ts-plugin-mmlpx](https://github.com/mmlpxjs/ts-plugin-mmlpx) to generate store name automatically, you don't need to name your stores manually.
 
 You can check the [mmlpx-todomvc redo/undo demo](https://mmlpxjs.github.io/mmlpx-todomvc) and the [demo source code](https://github.com/mmlpxjs/mmlpx-todomvc/blob/master/src/containers/TodoApp/ViewModel.ts#L124) for details.
 
