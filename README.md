@@ -23,17 +23,17 @@ yarn add mmlpx
 
 * MobX: ^3.2.1 || ^4.0.0 || ^5.0.0
 
+## Boilerplates
+
+- [mmlpx-todomvc](https://github.com/mmlpxjs/mmlpx-todomvc)
+
 ## Motivation
 
 Try to explore the possibilities for building a view-framework-free data layer based on mobx, summarize the generic model layer paradigm, and provide the relevant useful toolkits to make it easier and more intuitive.
 
-## Boilerplates
-
-* [mmlpx-todomvc](https://github.com/mmlpxjs/mmlpx-todomvc)
-
 ## Articles
 
-* [Turn On Time-Travelling Engine For MobX](https://itnext.io/turn-on-time-travelling-for-mobx-c3f267a46f10)  [中文](https://zhuanlan.zhihu.com/p/39354507)
+* [Turn On Time-Travelling Engine For MobX](https://itnext.io/turn-on-time-travelling-for-mobx-c3f267a46f10)  ([中文](https://zhuanlan.zhihu.com/p/39354507))
 
 ## Features
 
