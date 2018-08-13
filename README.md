@@ -132,7 +132,7 @@ class ViewModel {
 }
 
 class App extends Component {
-    @inject(ViewModel, app => [app.props.params.id, app.props.params])
+    @inject(ViewModel, app => [app.props.params.projectId, app.props.params.userId])
     viewModel;
     
     componentDidMount() {
@@ -216,7 +216,7 @@ class UserStore {
 
 Page interaction logic definition, live around the component lifecycle,  `ViewModel` instance can not be stored in ioc container. 
 
-The only one direct consumer of `Store`, besides the UI-domain/local states, others are derived from `Store` via `@computed` in `ViewModel`. 
+The only direct consumer of `Store`, besides the UI-domain/local states, others are derived from `Store` via `@computed` in `ViewModel`. 
 
 The global states mutation are resulted by store **command** invocation from `ViewModel`, and the separated **queries** are represented by transparent subscriptions with `computed` decorator.
 
