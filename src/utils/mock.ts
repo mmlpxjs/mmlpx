@@ -9,7 +9,7 @@ import { IMmlpx, modelNameSymbol } from '../core/dependency-inject/meta';
 export default function mock<T>(Clazz: IMmlpx<T>, mockInstance: T, name?: string) {
 
 	const container = getInjector()._getContainer();
-	const modelName = Clazz[modelNameSymbol] || name;
+	const modelName = Clazz[modelNameSymbol] || (Clazz[modelNameSymbol] = name!);
 	if (!modelName) {
 		throw new SyntaxError('you need to make sure that the model had a model name');
 	}
@@ -17,6 +17,6 @@ export default function mock<T>(Clazz: IMmlpx<T>, mockInstance: T, name?: string
 	container.set(modelName, mockInstance);
 
 	return function recover() {
-		container.set(Clazz[modelNameSymbol], null);
+		container.set(modelName, null);
 	};
 }
