@@ -154,7 +154,7 @@ class App extends Component {
 
 `mmlpx` di system also provided the mock method to support unit test.
 
-* function mock<T>(Clazz: IMmlpx<T>, mockInstance: T, name?: string) : recover
+* `function mock<T>(Clazz: IMmlpx<T>, mockInstance: T, name?: string) : recover`
 
 ```js
 @Store
