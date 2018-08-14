@@ -87,20 +87,20 @@ class ReactiveContainer implements IContainer<string, any> {
 	}
 }
 
-export default function genReactiveInjector(prevInjector: IReactiveInjector) {
+export default function genReactiveInjector(prevInjector: Injector) {
 
-	if (prevInjector[reactiveInjectorSymbol]) {
+	if ((prevInjector as IReactiveInjector)[reactiveInjectorSymbol]) {
 		return prevInjector;
 	}
 
-	let newInjector = prevInjector;
+	let newInjector = prevInjector as IReactiveInjector;
 
 	/*
 	 * if the injector has an LRUCache based container, we can hijack it and made the underlying map to be a reactive map,
 	 * and keep the lru features
 	 * otherwise we need to construct a simple-ObservableMap-based reactive container
 	 */
-	const container: any = prevInjector.getContainer();
+	const container: any = prevInjector._getContainer();
 	const cacheSymbol = getLRUCacheSymbol(container);
 	if (cacheSymbol) {
 		makeLRUCacheReactive(container, cacheSymbol);

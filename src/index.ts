@@ -10,6 +10,7 @@ import Store from './core/dependency-inject/decorators/Store';
 import ViewModel from './core/dependency-inject/decorators/ViewModel';
 import instantiate from './core/dependency-inject/instantiate';
 import { IMmlpx, modelNameSymbol } from './core/dependency-inject/meta';
+import mock from './utils/mock';
 
 export { onSnapshot, applySnapshot, patchSnapshot, getSnapshot } from './api/snapshot';
 
@@ -23,4 +24,5 @@ export {
 	Store,
 	postConstruct,
 	instantiate,
+	mock,
 };

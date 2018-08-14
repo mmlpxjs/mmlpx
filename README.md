@@ -79,7 +79,7 @@ It is well known that MobX is an value-based reactive system which lean to oop p
 
 mmlpx DI system was deep inspired by [spring ioc](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans).
 
-#### typescript usage
+#### Typescript Usage
 
 ```ts
 import { inject, ViewModel, Store } from 'mmlpx';
@@ -95,7 +95,7 @@ class AppViewModel {
 
 Due to we leverage the metadata description ability of typescript, you need to make sure that you had configured `emitDecoratorMetadata: true`  in your `tsconfig.json`.
 
-#### javascript usage
+#### Javascript Usage
 
 ```js
 import { inject, ViewModel, Store } from 'mmlpx';
@@ -109,7 +109,7 @@ class AppViewModel {
 }
 ```
 
-#### more advanced
+#### More Advanced
 
 Sometimes you may need to intialize your dependencies dynamically, such as the constructor parameters came from router query string. Fortunately `mmlpx` supported the ability via `inject`.
 
@@ -149,6 +149,33 @@ class App extends Component {
 * `inject(ViewModel, instance => instance.router.props) viewModel;` initialized with dynamic instance props for `ViewModel` constructor.
 
 **Notice that all the `Store` decorated class are singleton and that was the default behavior in mmlpx di system**, if you wanna make your state live around the component lifecycle, always decorated them with `ViewModel` decorator.
+
+#### Test Support
+
+`mmlpx` di system also provided the mock method to support unit test.
+
+* function mock<T>(Clazz: IMmlpx<T>, mockInstance: T, name?: string) : recover
+
+```js
+@Store
+class InjectedStore {
+    name = 'kuitos';
+}
+
+class ViewModel {
+    @inject() store: InjectedStore;
+}
+
+// mock the InjectedStore
+const recover = mock(InjectedStore, { name: 'mock'});
+
+const vm = new ViewModel();
+expect(vm.store.name).toBe('mock');
+// recover the di system
+recover();
+```
+
+
 
 ### Time Travelling
 

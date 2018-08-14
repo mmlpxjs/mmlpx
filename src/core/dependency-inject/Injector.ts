@@ -51,7 +51,7 @@ export default class Injector {
 		return new Injector(container);
 	}
 
-	getContainer() {
+	_getContainer() {
 		return this.container;
 	}
 
