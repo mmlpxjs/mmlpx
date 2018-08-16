@@ -173,6 +173,9 @@ const vm = new ViewModel();
 expect(vm.store.name).toBe('mock');
 // recover the di system
 recover();
+
+const vm2 = new ViewModel();
+expect(vm2.store.name).toBe('kuitos');
 ```
 
 
