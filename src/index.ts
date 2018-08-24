@@ -4,6 +4,7 @@
  * @since 2017-07-12
  */
 
+import useStrict from './api/configure';
 import inject from './core/dependency-inject/decorators/inject';
 import postConstruct from './core/dependency-inject/decorators/postConstruct';
 import Store from './core/dependency-inject/decorators/Store';
@@ -25,4 +26,5 @@ export {
 	postConstruct,
 	instantiate,
 	mock,
+	useStrict,
 };

@@ -178,7 +178,25 @@ const vm2 = new ViewModel();
 expect(vm2.store.name).toBe('kuitos');
 ```
 
+### Strict Mode
 
+If you wanna strictly follow the CQRS diagram to make your state changes more predictable, you could enable the strict mode by calling `useStrcit(true)`, then your actions in `Store` or `ViewModel` will not return anything even you had declared a return statement.
+
+```ts
+import { useStrict } from 'mmlpx';
+useStrict(true);
+
+@Store
+class UserStore {
+    @observable name = 'kuitos';
+    
+    @action updateName(newName: string) {
+        this.name = newName;
+        // after enable strict mode, the returned value will be ignored
+        return this.name;
+    }   
+}
+```
 
 ### Time Travelling
 

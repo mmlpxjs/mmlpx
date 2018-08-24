@@ -4,6 +4,8 @@
  * @since 2017-12-19
  */
 
+import { isAction } from 'mobx';
+import { isStrict } from '../api/configure';
 import { modelNameSymbol, modelTypeSymbol } from '../core/dependency-inject/meta';
 
 export default function namedModelDecorator(name: string, type: symbol): ClassDecorator {
@@ -11,6 +13,22 @@ export default function namedModelDecorator(name: string, type: symbol): ClassDe
 	return (target: any) => {
 		target[modelNameSymbol] = name;
 		target[modelTypeSymbol] = type;
+
+		if (isStrict) {
+
+			const methodNames = Object.getOwnPropertyNames(target.prototype);
+
+			methodNames.forEach(methodName => {
+				const method = target.prototype[methodName];
+				// when enable the strict mode, the action should not return anything
+				if (isAction(method)) {
+					target.prototype[methodName] = function(this: any, ...args: any[]) {
+						method.apply(this, args);
+					};
+				}
+			});
+		}
+
 		return target;
 	};
 }
