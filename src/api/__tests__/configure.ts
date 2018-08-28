@@ -16,8 +16,12 @@ test('store actions should not return anythings when in strict mode', () => {
 	class StoreClass {
 		name = 'kuitos';
 
+		@action updateWithThrowException() {
+			return this.name = 'kuitos lau error';
+		}
+
 		@action update() {
-			return this.name = 'kuitos lau';
+			this.name = 'kuitos lau';
 		}
 	}
 
@@ -29,5 +33,8 @@ test('store actions should not return anythings when in strict mode', () => {
 	expect(vm.store.name).toBe('kuitos');
 	expect(vm.store.update()).toBeUndefined();
 	expect(vm.store.name).toBe('kuitos lau');
+
+	expect(() => vm.store.updateWithThrowException()).toThrow(SyntaxError);
+	expect(vm.store.name).toBe('kuitos lau error');
 
 });

@@ -24,9 +24,8 @@ export default function namedModelDecorator(name: string, type: symbol): ClassDe
 				if (isAction(method)) {
 					target.prototype[methodName] = function(this: any, ...args: any[]) {
 						const returnedValue = method.apply(this, args);
-						/* istanbul ignore next */
-						if (process.env.NODE_ENV !== 'production' && returnedValue) {
-							console.warn('you should not return any values from actions when you enable the strict mode!');
+						if (returnedValue) {
+							throw new SyntaxError('you should not return any values from actions when you enable the strict mode!');
 						}
 					};
 				}
