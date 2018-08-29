@@ -192,7 +192,7 @@ class UserStore {
     
     @action updateName(newName: string) {
         this.name = newName;
-        // after enable strict mode, the returned value will be ignored
+        // return statement will throw a exceptin when strict mode enabled
         return this.name;
     }   
 }

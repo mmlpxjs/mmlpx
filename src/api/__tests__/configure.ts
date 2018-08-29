@@ -23,6 +23,10 @@ test('store actions should not return anythings when in strict mode', () => {
 		@action update() {
 			this.name = 'kuitos lau';
 		}
+
+		getName() {
+			return this.name;
+		}
 	}
 
 	class ViewModel {
@@ -33,6 +37,8 @@ test('store actions should not return anythings when in strict mode', () => {
 	expect(vm.store.name).toBe('kuitos');
 	expect(vm.store.update()).toBeUndefined();
 	expect(vm.store.name).toBe('kuitos lau');
+
+	expect(vm.store.getName()).toBe(vm.store.name);
 
 	expect(() => vm.store.updateWithThrowException()).toThrow(SyntaxError);
 	expect(vm.store.name).toBe('kuitos lau error');
