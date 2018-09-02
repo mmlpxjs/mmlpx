@@ -180,7 +180,7 @@ expect(vm2.store.name).toBe('kuitos');
 
 ### Strict Mode
 
-If you wanna strictly follow the CQRS diagram to make your state changes more predictable, you could enable the strict mode by calling `useStrcit(true)`, then your actions in `Store` or `ViewModel` will not return anything even you had declared a return statement.
+If you wanna strictly follow the CQRS paradigm to make your state changes more predictable, you could enable the strict mode by invoking `useStrcit(true)`, then your actions in `Store` or `ViewModel` will throw an exception while you declaring a return statement.
 
 ```ts
 import { useStrict } from 'mmlpx';
