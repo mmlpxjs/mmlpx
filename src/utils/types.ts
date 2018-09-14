@@ -11,3 +11,8 @@ export const isMap = (obj: any) => Object.prototype.toString.call(obj) === '[obj
 	(obj && isFunction(obj.delete) && isFunction(obj.get) && isFunction(obj.set));
 
 export const isArray = (obj: any) => obj && (Array.isArray(obj) || isArrayLikeObject(obj));
+
+export const isPromiseLike = (obj: any) => obj && typeof obj.then === 'function';
+
+export const isGeneratorLike = (obj: any) => obj && typeof obj.next === 'function' && typeof obj.return === 'function'
+	&& typeof obj.throw === 'function';

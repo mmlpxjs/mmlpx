@@ -58,6 +58,9 @@
       "js",
       "ts"
     ],
+    "globals": {
+      "process.env.NODE_ENV": "test"
+    },
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts"
     ],
