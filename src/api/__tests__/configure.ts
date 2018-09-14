@@ -25,8 +25,8 @@ test('store actions should not return anythings when in strict mode', async () =
 		}
 
 		@action
-		async asyncUpdate() {
-			const name = await 'async';
+		async asyncUpdate(name: string) {
+			await name;
 			this.name = name;
 		}
 
@@ -54,7 +54,7 @@ test('store actions should not return anythings when in strict mode', async () =
 	expect(() => vm.store.updateWithThrowException()).toThrow(SyntaxError);
 	expect(vm.store.name).toBe('kuitos lau error');
 
-	expect(await vm.store.asyncUpdate()).toBeUndefined();
+	expect(await vm.store.asyncUpdate('async')).toBeUndefined();
 	expect(vm.store.name).toBe('async');
 
 	let error;
