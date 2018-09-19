@@ -157,15 +157,15 @@ class App extends Component {
 While you are limited to use `decorator` in some scenario, you could use `instantiate` to instead of `@inject`.
 
 ```ts
-@Store
-class UserStore {
+@ViewModel
+class UserViewModel {
     constructor(name, age) {
         this.name = name;
         this.age = age;
     }
 }
 
-const userStore = instantiate(UserStore, 'kuitos', 18);
+const userVM = instantiate(UserViewModel, 'kuitos', 18);
 ```
 
 #### Test Support
