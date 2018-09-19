@@ -6,17 +6,14 @@
 
 import { spy } from 'sinon';
 import inject from '../inject';
-import postConstruct from '../postConstruct';
 import ViewModel from '../ViewModel';
 
 let spyFn: any;
-let onInitSpy: any;
 let ViewModelClass: any = null;
 
 beforeEach(() => {
 
 	spyFn = spy();
-	onInitSpy = spy();
 
 	@ViewModel
 	class Klass {
@@ -29,17 +26,12 @@ beforeEach(() => {
 			this.age = age;
 			spyFn(name);
 		}
-
-		@postConstruct
-		onInit() {
-			onInitSpy(this.name);
-		}
 	}
 
 	ViewModelClass = Klass;
 });
 
-test('injected viewModel will only construct at initial period and postConstruct will exec after', () => {
+test('injected viewModel will only construct at initial period', () => {
 
 	expect(spyFn.called).toBe(false);
 
@@ -55,7 +47,6 @@ test('injected viewModel will only construct at initial period and postConstruct
 	const unused = (controller.viewModel, controller.viewModel);
 	expect(spyFn.called).toBe(true);
 	expect(spyFn.callCount).toBe(1);
-	expect(onInitSpy.calledAfter(spyFn)).toBe(true);
 
 });
 
@@ -73,7 +64,6 @@ test('inject viewModel with static params', () => {
 
 	expect(controller.viewModel.name).toBe(name);
 	expect(spyFn.calledWith(name)).toBe(true);
-	expect(onInitSpy.calledWith(name)).toBe(true);
 
 });
 

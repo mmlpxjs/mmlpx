@@ -1,6 +1,6 @@
 {
   "name": "mmlpx",
-  "version": "3.4.2",
+  "version": "4.0.0",
   "description": "mobx model layer paradigm",
   "homepage": "https://github.com/mmlpxjs/mmlpx",
   "repository": "https://github.com/mmlpxjs/mmlpx.git",
@@ -58,6 +58,9 @@
       "js",
       "ts"
     ],
+    "globals": {
+      "process.env.NODE_ENV": "test"
+    },
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts"
     ],

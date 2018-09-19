@@ -7,7 +7,6 @@
 import { flatten, isFunction } from 'lodash';
 import Injector, { Scope } from '../Injector';
 import { IMmlpx, modelNameSymbol } from '../meta';
-import execPostConstruct from './execPostConstruct';
 
 export default function initialize<T extends IMmlpx<T>>(this: T, injector: Injector, ViewModel: T, ...args: any[]) {
 
@@ -19,9 +18,6 @@ export default function initialize<T extends IMmlpx<T>>(this: T, injector: Injec
 	}
 
 	const name = ViewModel[modelNameSymbol];
-	const viewModel = injector.get(ViewModel, { scope: Scope.Prototype, name }, ...constructorParams);
 
-	execPostConstruct(viewModel);
-
-	return viewModel;
+	return injector.get(ViewModel, { scope: Scope.Prototype, name }, ...constructorParams);
 }

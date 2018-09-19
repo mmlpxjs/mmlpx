@@ -8,9 +8,9 @@ import inject from '../../core/dependency-inject/decorators/inject';
 import Store from '../../core/dependency-inject/decorators/Store';
 import useStrict from '../configure';
 
-test('store actions should not return anythings when in strict mode', () => {
+test('store actions should not return anythings when in strict mode', async () => {
 
-	useStrict(true);
+	const prev = useStrict(true);
 
 	@Store
 	class StoreClass {
@@ -22,6 +22,17 @@ test('store actions should not return anythings when in strict mode', () => {
 
 		@action update() {
 			this.name = 'kuitos lau';
+		}
+
+		@action
+		async asyncUpdate(name: string) {
+			await name;
+			this.name = name;
+		}
+
+		@action
+		async asyncUpdateWithException() {
+			return this.name = await 'async error';
 		}
 
 		getName() {
@@ -43,4 +54,17 @@ test('store actions should not return anythings when in strict mode', () => {
 	expect(() => vm.store.updateWithThrowException()).toThrow(SyntaxError);
 	expect(vm.store.name).toBe('kuitos lau error');
 
+	expect(await vm.store.asyncUpdate('async')).toBeUndefined();
+	expect(vm.store.name).toBe('async');
+
+	let error;
+	try {
+		await vm.store.asyncUpdateWithException();
+	} catch (e) {
+		error = e;
+	}
+	expect(error).toBeInstanceOf(SyntaxError);
+	expect(vm.store.name).toBe('async error');
+
+	useStrict(prev);
 });

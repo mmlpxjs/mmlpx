@@ -7,5 +7,7 @@
 export let isStrict = false;
 
 export default function useStrict(strict: boolean) {
+	const prevStrict = isStrict;
 	isStrict = strict;
+	return prevStrict;
 }

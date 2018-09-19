@@ -111,6 +111,8 @@ class AppViewModel {
 
 #### More Advanced
 
+##### inject
+
 Sometimes you may need to intialize your dependencies dynamically, such as the constructor parameters came from router query string. Fortunately `mmlpx` supported the ability via `inject`.
 
 ```js
@@ -148,7 +150,23 @@ class App extends Component {
 * `inject(ViewModel, 10, 'kuitos') viewModel;`  initialized with static parameters for `ViewModel` constrcutor.
 * `inject(ViewModel, instance => instance.router.props) viewModel;` initialized with dynamic instance props for `ViewModel` constructor.
 
-**Notice that all the `Store` decorated class are singleton and that was the default behavior in mmlpx di system**, if you wanna make your state live around the component lifecycle, always decorated them with `ViewModel` decorator.
+**Notice that all the `Store` decorated classes are singleton by default so that the dynamic initial params injection would be ignored by di system**, if you wanna make your state live around the component lifecycle, always decorated them with `ViewModel` decorator.
+
+##### instantiate
+
+While you are limited to use `decorator` in some scenario, you could use `instantiate` to instead of `@inject`.
+
+```ts
+@ViewModel
+class UserViewModel {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+const userVM = instantiate(UserViewModel, 'kuitos', 18);
+```
 
 #### Test Support
 
@@ -204,7 +222,7 @@ class UserStore {
    <img src="https://github.com/mmlpxjs/mmlpx-todomvc/blob/master/todomvc.gif?raw=true">
 </div>
 
-Benefit from the power of model managment by di system, mmlpx supported time travelling out of box.
+Benefit from the power of model management by di system, mmlpx supported time travelling out of box.
 
 All you need are the three apis: `getSnapshot`, `applySnapshot` and `onSnapshot`.
 
@@ -257,8 +275,15 @@ class UserStore {
         const users = await this.loader.getUsers();
         this.users = users;
     }
+    
+    @postConstruct
+    onInit() {
+        observe(this, 'users', () => {})
+    }
 }
 ```
+
+*Method decorated by `postConstruct` will be invoked when `Store` initialized by DI system.*
 
 ### ViewModel
 
@@ -266,7 +291,7 @@ Page interaction logic definition, live around the component lifecycle,  `ViewMo
 
 The only direct consumer of `Store`, besides the UI-domain/local states, others are derived from `Store` via `@computed` in `ViewModel`. 
 
-The global states mutation are resulted by store **command** invocation from `ViewModel`, and the separated **queries** are represented by transparent subscriptions with `computed` decorator.
+The global states mutation are resulted by store **command** invocation in `ViewModel`, and the separated **queries** are represented by transparent subscriptions with `computed` decorator.
 
 ```ts
 import { observable, action } from 'mobx';
@@ -287,13 +312,7 @@ class AppViewModel {
     @action
     setLoading(loading: boolean) {
         this.loading = loading;
-    }
-    
-    @postConstruct
-    async onInit() {
-        await this.userStore.loadUsers();
-        this.setLoading(false);
-    }
+    }   
 }
 ```
 
