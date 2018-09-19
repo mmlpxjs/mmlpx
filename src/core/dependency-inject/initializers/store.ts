@@ -4,24 +4,26 @@
  * @since 2017-09-13
  */
 
-import { flatten, isFunction } from 'lodash';
 import Injector, { Scope } from '../Injector';
 import { IMmlpx, modelNameSymbol } from '../meta';
+import execPostConstruct from './execPostConstruct';
 
 export default function initialize<T extends IMmlpx<T>>(this: T, injector: Injector, Store: T, ...args: any[]) {
 
-	let constructorParams = args;
-
-	// if the first argument is a function, we can initialize it with the invoker instance `this`
-	if (isFunction(args[0])) {
-		constructorParams = flatten([args[0].call(this, this)]);
-		/* istanbul ignore next */
-		if (process.env.NODE_ENV !== 'production') {
-			console.warn('It looks like you are use Store with a non-singleton mode, which was deprecated!!', Store.name);
+	// store should not dynamic initialize while injecting
+	if (args && args.length) {
+		if (process.env.NODE_ENV === 'test') {
+			throw new SyntaxError(`${Store.name}: As a singleton recipe, you should not instantiate Store with dynamic arguments!`);
+		} else if (process.env.NODE_ENV !== 'production') {
+			/* istanbul ignore next */
+			console.error(`${Store.name}: As a singleton recipe, you should not instantiate Store with dynamic arguments!`);
 		}
 	}
 
 	const name = Store[modelNameSymbol];
-	const store = injector.get(Store, { scope: Scope.Singleton, name }, ...constructorParams);
+	const store = injector.get(Store, { scope: Scope.Singleton, name });
+
+	execPostConstruct(store);
+
 	return store;
 }

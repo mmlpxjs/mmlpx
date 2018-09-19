@@ -150,7 +150,7 @@ class App extends Component {
 * `inject(ViewModel, 10, 'kuitos') viewModel;`  initialized with static parameters for `ViewModel` constrcutor.
 * `inject(ViewModel, instance => instance.router.props) viewModel;` initialized with dynamic instance props for `ViewModel` constructor.
 
-**Notice that all the `Store` decorated classes are singleton and that was the default behavior in mmlpx di system**, if you wanna make your state live around the component lifecycle, always decorated them with `ViewModel` decorator.
+**Notice that all the `Store` decorated classes are singleton by default so that the dynamic initial params injection would be ignored by di system**, if you wanna make your state live around the component lifecycle, always decorated them with `ViewModel` decorator.
 
 ##### instantiate
 
@@ -275,8 +275,15 @@ class UserStore {
         const users = await this.loader.getUsers();
         this.users = users;
     }
+    
+    @postConstruct
+    onInit() {
+        observe(this, 'users', () => {})
+    }
 }
 ```
+
+*Method decorated by `postConstruct` will be invoked when `Store` initialized by DI system.*
 
 ### ViewModel
 
@@ -305,17 +312,9 @@ class AppViewModel {
     @action
     setLoading(loading: boolean) {
         this.loading = loading;
-    }
-    
-    @postConstruct
-    async onInit() {
-        await this.userStore.loadUsers();
-        this.setLoading(false);
-    }
+    }   
 }
 ```
-
-*Method decorated by `postConstruct` will be invoked when `ViewModel` initialized by DI system.*
 
 ### Loader
 
