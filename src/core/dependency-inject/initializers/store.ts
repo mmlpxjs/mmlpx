@@ -10,7 +10,7 @@ import execPostConstruct from './execPostConstruct';
 
 export default function initialize<T extends IMmlpx<T>>(this: T, injector: Injector, Store: T, ...args: any[]) {
 
-	// store should not dynamic initialize while injecting
+	// store should not initialize dynamically while injecting
 	if (args && args.length) {
 		if (process.env.NODE_ENV === 'test') {
 			throw new SyntaxError(`${Store.name}: As a singleton recipe, you should not instantiate Store with dynamic arguments!`);
