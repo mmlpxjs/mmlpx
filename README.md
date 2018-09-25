@@ -259,7 +259,7 @@ You can check the [mmlpx-todomvc redo/undo demo](https://mmlpxjs.github.io/mmlpx
 Business logic and rules definition, equate to the model in [mvvm architecture](https://msdn.microsoft.com/en-us/library/hh848246.aspx), singleton in an application. Also known as domain object in [DDD](https://en.wikipedia.org/wiki/Domain-driven_design), always represent the single source of truth of the application.
 
 ```ts
-import { observable, action } from 'mobx';
+import { observable, action, observe } from 'mobx';
 import { Store, inject } from 'mmlpx';
 import UserLoader from './UserLoader';
 
