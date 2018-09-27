@@ -12,10 +12,10 @@ export default function initialize<T extends IMmlpx<T>>(this: T, injector: Injec
 
 	// store should not initialize dynamically while injecting
 	if (args && args.length) {
+		/* istanbul ignore else  */
 		if (process.env.NODE_ENV === 'test') {
 			throw new SyntaxError(`${Store.name}: As a singleton recipe, you should not instantiate Store with dynamic arguments!`);
 		} else if (process.env.NODE_ENV !== 'production') {
-			/* istanbul ignore next */
 			console.error(`${Store.name}: As a singleton recipe, you should not instantiate Store with dynamic arguments!`);
 		}
 	}
