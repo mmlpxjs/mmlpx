@@ -24,9 +24,10 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "lru-cache": "^5.1.1",
+    "lru-cache": "^4.1.5",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.0",
+    "util": "^0.11.1",
     "uuid": "^3.1.0"
   },
   "peerDependencies": {
