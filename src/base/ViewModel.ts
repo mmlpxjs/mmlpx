@@ -1,12 +1,13 @@
 import { action, observable, runInAction } from 'mobx';
 import { applySnapshot, getSnapshot, onSnapshot } from '..';
+import { StorageLoader } from '../loader/StorageLoader';
 
 export default abstract class ViewModelBase {
 	@observable
-	protected stack: any[] = [];
+	private cursor = 0;
 
 	@observable
-	protected cursor = 0;
+	private stack: any[] = [];
 
 	@action.bound
 	enableRedoUndo() {
@@ -26,6 +27,7 @@ export default abstract class ViewModelBase {
 		if (tmp >= this.stack.length) {
 			return;
 		}
+
 		applySnapshot(this.stack[++this.cursor]);
 	}
 
@@ -35,6 +37,7 @@ export default abstract class ViewModelBase {
 		if (tmp < 0) {
 			return;
 		}
+
 		applySnapshot(this.stack[--this.cursor]);
 	}
 }

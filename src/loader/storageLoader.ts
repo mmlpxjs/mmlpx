@@ -1,29 +1,32 @@
+import { toJS, values } from 'mobx';
 import { Snapshot } from '../core/dependency-inject/Injector';
 
-// @ts-ignore
-let usedStorage = window && window.localStorage;
+export default class StorageLoader {
+	static key = Symbol('key');
 
-let usedSnapshotKey = 'mmlpx-snapshot';
+	static snapshotKey = 'mmlpx-snapshot';
 
-export default function shimLoader(storage: any, snapshotKey = 'mmlpx-snapshot') {
-	usedStorage = storage;
-	usedSnapshotKey = snapshotKey;
-}
-
-export class StorageLoader {
-	static readonly snapshotKey = usedSnapshotKey;
+	// @ts-ignore
+	static snapshotStorage = window && window.localStorage;
 
 	static saveSnapshot(snapshot: Snapshot) {
-		usedStorage.setItem(StorageLoader.snapshotKey, JSON.stringify(snapshot));
+		StorageLoader.snapshotStorage.setItem(StorageLoader.snapshotKey, JSON.stringify(snapshot));
 	}
 
 	static getSnapshot(): Snapshot {
-		let rs;
+		const rs = StorageLoader.snapshotStorage.getItem(StorageLoader.snapshotKey);
+		let value;
+		if (rs) {
+			value = JSON.parse(rs);
+		} else {
+			value = undefined;
+		}
+		console.log('%c%s', 'color: #20bd08;font-size:15px', '===TQY===: StorageLoader -> value', value, StorageLoader.snapshotKey);
+		return value;
+	}
 
-		try {
-			rs = JSON.parse(usedStorage.getItem(StorageLoader.snapshotKey)!);
-		} catch (error) {}
-
-		return rs;
+	static shimLoader(snapshotStorage: any, snapshotKey = 'mmlpx-snapshot') {
+		StorageLoader.snapshotStorage = snapshotStorage;
+		StorageLoader.snapshotKey = snapshotKey;
 	}
 }
