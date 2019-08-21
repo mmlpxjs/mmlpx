@@ -17,9 +17,7 @@ test('undo method based ViewModelBase class should back to prev snapshot; redo m
 			mockStoragePool[key] = value;
 		},
 		getItem: (key: string) => {
-			console.log('%c%s', 'color: #20bd08;font-size:15px', '===TQY===: key', key);
 			const value = mockStoragePool[key];
-			console.log('%c%s', 'color: #20bd08;font-size:15px', '===TQY===: value', value);
 			return value;
 		},
 	};

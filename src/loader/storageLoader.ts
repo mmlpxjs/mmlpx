@@ -15,13 +15,8 @@ export default class StorageLoader {
 
 	static getSnapshot(): Snapshot {
 		const rs = StorageLoader.snapshotStorage.getItem(StorageLoader.snapshotKey);
-		let value;
-		if (rs) {
-			value = JSON.parse(rs);
-		} else {
-			value = undefined;
-		}
-		console.log('%c%s', 'color: #20bd08;font-size:15px', '===TQY===: StorageLoader -> value', value, StorageLoader.snapshotKey);
+		const value = rs ? JSON.parse(rs) : undefined;
+
 		return value;
 	}
 
