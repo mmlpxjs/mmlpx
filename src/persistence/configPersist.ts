@@ -4,8 +4,12 @@ import StorageLoader from './StorageLoader';
 
 let persistenceDisposer: any = null;
 
-export default function configPersist(options: any = {}) {
-	const { persist = true } = options;
+interface IPtions {
+	persist?: boolean;
+}
+
+export default function configPersist(options: IPtions = {}) {
+	const { persist = false } = options;
 
 	if (persist) {
 		const res = StorageLoader.getSnapshot();

@@ -42,7 +42,7 @@ test('persist of configPersist should enable or disable persisting', async () =>
 	const vm = new ViewModel();
 	expect(vm.store.name).toBe('anthony');
 
-	configPersist();
+	configPersist({ persist: true });
 
 	expect(vm.store.name).toBe('tank');
 
@@ -55,7 +55,7 @@ test('persist of configPersist should enable or disable persisting', async () =>
 	expect(vm.store.name).toBe('...');
 	expect(StorageLoader.getSnapshot()).toEqual({ StoreClass: { name: '...' } });
 
-	configPersist({ persist: false, StorageLoader });
+	configPersist({ persist: false });
 
 	vm.store.update('test');
 	expect(vm.store.name).toBe('test');
