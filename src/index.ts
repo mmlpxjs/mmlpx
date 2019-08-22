@@ -12,7 +12,7 @@ import Store from './core/dependency-inject/decorators/Store';
 import ViewModel from './core/dependency-inject/decorators/ViewModel';
 import instantiate from './core/dependency-inject/instantiate';
 import { IMmlpx, modelNameSymbol } from './core/dependency-inject/meta';
-import { init } from './life/init';
+import configPersist from './persistence/configPersist';
 
 import mock from './utils/mock';
 
@@ -22,4 +22,4 @@ export function getModelName<T>(model: IMmlpx<T>) {
 	return model[modelNameSymbol];
 }
 
-export { inject, ViewModel, Store, postConstruct, instantiate, mock, useStrict, ViewModelBase, init };
+export { inject, ViewModel, Store, postConstruct, instantiate, mock, useStrict, ViewModelBase, configPersist };

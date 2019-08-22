@@ -64,7 +64,7 @@
       "process.env.NODE_ENV": "test"
     },
     "testMatch": [
-      "<rootDir>/src/life/__tests__/**/*.ts"
+      "<rootDir>/src/**/__tests__/**/*.ts"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",

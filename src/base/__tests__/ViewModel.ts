@@ -1,12 +1,8 @@
-/**
- * @author anthony
- * @homepage https://github.com/anthony/
- * @since 2018-08-24 11:30
- */
 import { action, observable } from 'mobx';
-import { ViewModelBase } from '../..';
+
 import inject from '../../core/dependency-inject/decorators/inject';
 import Store from '../../core/dependency-inject/decorators/Store';
+import ViewModelBase from '../ViewModel';
 
 test('undo method based ViewModelBase class should back to prev snapshot; redo method should forward to next snapshot', async () => {
 	@Store('StoreClass')

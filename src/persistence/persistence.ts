@@ -1,4 +1,4 @@
-import { onSnapshot } from '..';
+import { onSnapshot } from '../api/snapshot';
 import StorageLoader from './StorageLoader';
 
 export default function persistence() {

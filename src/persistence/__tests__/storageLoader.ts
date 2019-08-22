@@ -1,9 +1,3 @@
-/**
- * @author Kuitos
- * @homepage https://github.com/kuitos/
- * @since 2018-08-24 11:30
- */
-
 import StorageLoader from '../StorageLoader';
 
 test('shimLoader method of StorageLoader class should implement getSnapshot, saveSnapshot methods and custom snapshotKey', async () => {

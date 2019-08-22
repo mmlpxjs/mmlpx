@@ -1,10 +1,6 @@
-/**
- * @author anthony
- * @homepage https://github.com/anthony/
- * @since 2018-08-24 11:30
- */
 import { action, observable } from 'mobx';
-import { ViewModelBase } from '../..';
+
+import ViewModelBase from '../../base/ViewModel';
 import inject from '../../core/dependency-inject/decorators/inject';
 import Store from '../../core/dependency-inject/decorators/Store';
 import persistence from '../persistence';
@@ -22,7 +18,7 @@ const mockLocalStorage = {
 
 StorageLoader.shimLoader(mockLocalStorage, 'anthony-storage');
 
-test('undo method based ViewModelBase class should back to prev snapshot; redo method should forward to next snapshot', async () => {
+test('persistence should enable snapshot persisting', async () => {
 	@Store('StoreClass')
 	class StoreClass {
 		@observable name = 'anthony';
