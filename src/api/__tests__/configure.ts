@@ -16,7 +16,7 @@ test('store actions should not return anythings when in strict mode', async () =
 		name = 'kuitos';
 
 		@action updateWithThrowException() {
-			return (this.name = 'kuitos lau error');
+			return this.name = 'kuitos lau error';
 		}
 
 		@action update() {
@@ -31,7 +31,7 @@ test('store actions should not return anythings when in strict mode', async () =
 
 		@action
 		async asyncUpdateWithException() {
-			return (this.name = await 'async error');
+			return this.name = await 'async error';
 		}
 
 		getName() {
