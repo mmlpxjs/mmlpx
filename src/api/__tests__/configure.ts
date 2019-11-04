@@ -9,7 +9,6 @@ import Store from '../../core/dependency-inject/decorators/Store';
 import useStrict from '../configure';
 
 test('store actions should not return anythings when in strict mode', async () => {
-
 	const prev = useStrict(true);
 
 	@Store
