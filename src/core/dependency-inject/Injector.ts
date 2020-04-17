@@ -4,113 +4,115 @@
  * @since 2017/12/25
  */
 
-import LRUCache, { LRUEntry } from 'lru-cache';
-import hydrate from './hydrate';
-import { Constructor } from './meta';
+import LRUCache, { LRUEntry } from "lru-cache";
+import hydrate from "./hydrate";
+import { Constructor } from "./meta";
 
-export const enum Scope {
-	Singleton = 'singleton',
-	Prototype = 'prototype',
+export enum Scope {
+  Singleton = "singleton",
+  Prototype = "prototype"
 }
 
 export type InjectionOptions = {
-	name?: string;
-	scope: Scope;
+  name?: string;
+  scope: Scope;
 };
 
 export type Snapshot = {
-	[propName: string]: any;
+  [propName: string]: any;
 };
 
 export type Entry<K, V> = {
-	k: K;
-	v: V;
-	e?: number;
+  k: K;
+  v: V;
+  e?: number;
 };
 
 export interface IContainer<K, V> {
+  set(key: K, value: V): boolean;
 
-	set(key: K, value: V): boolean;
+  get(key: K): V | undefined;
 
-	get(key: K): V | undefined;
+  dump(): Array<Entry<K, V>>;
 
-	dump(): Array<Entry<K, V>>;
-
-	load(cacheEntries: ReadonlyArray<Entry<K, V>>): void;
+  load(cacheEntries: ReadonlyArray<Entry<K, V>>): void;
 }
 
 export default class Injector {
+  private readonly container: IContainer<string, any>;
 
-	private readonly container: IContainer<string, any>;
+  private constructor(container?: IContainer<string, any>) {
+    this.container = container || new LRUCache<string, any>();
+  }
 
-	private constructor(container?: IContainer<string, any>) {
-		this.container = container || new LRUCache<string, any>();
-	}
+  static newInstance(container?: IContainer<string, any>) {
+    return new Injector(container);
+  }
 
-	static newInstance(container?: IContainer<string, any>) {
-		return new Injector(container);
-	}
+  _getContainer() {
+    return this.container;
+  }
 
-	_getContainer() {
-		return this.container;
-	}
+  get<T>(
+    InjectedClass: Constructor<T>,
+    options: InjectionOptions,
+    ...args: any[]
+  ): T {
+    const { scope, name } = options;
+    const { container } = this;
 
-	get<T>(InjectedClass: Constructor<T>, options: InjectionOptions, ...args: any[]): T {
+    let instance;
 
-		const { scope, name } = options;
-		const { container } = this;
+    switch (scope) {
+      case Scope.Singleton:
+        if (name) {
+          instance = container.get(name);
+          if (!instance) {
+            instance = new InjectedClass(...args);
+            // only singleton injection will be stored
+            container.set(name, instance);
+          } else {
+            const hydration = hydrate(instance, InjectedClass, ...args);
+            // when the stored instance is deserialized object(from snapshot), we need to restore the hydration instance
+            if (instance !== hydration) {
+              instance = hydration;
+              container.set(name, hydration);
+            }
+          }
 
-		let instance;
+          break;
+        }
 
-		switch (scope) {
+        throw new SyntaxError("A singleton injection must have a name!");
 
-			case Scope.Singleton:
+      case Scope.Prototype:
+        instance = new InjectedClass(...args);
+        break;
 
-				if (name) {
+      default:
+        throw new SyntaxError(
+          "You must set injected class as a mmlpx recognized model!"
+        );
+    }
 
-					instance = container.get(name);
-					if (!instance) {
-						instance = new InjectedClass(...args);
-						// only singleton injection will be stored
-						container.set(name, instance);
-					} else {
-						const hydration = hydrate(instance, InjectedClass, ...args);
-						// when the stored instance is deserialized object(from snapshot), we need to restore the hydration instance
-						if (instance !== hydration) {
-							instance = hydration;
-							container.set(name, hydration);
-						}
-					}
+    return instance;
+  }
 
-					break;
-				}
+  dump(): Snapshot {
+    return this.container
+      .dump()
+      .reduce((acc, entry) => ({ ...acc, [entry.k]: entry.v }), {});
+  }
 
-				throw new SyntaxError('A singleton injection must have a name!');
+  load(snapshot: Snapshot) {
+    const cacheArray: ReadonlyArray<LRUEntry<string, any>> = Object.keys(
+      snapshot
+    ).map(k => ({
+      k,
+      v: snapshot[k],
+      e: 0
+    }));
 
-			case Scope.Prototype:
-				instance = new InjectedClass(...args);
-				break;
-
-			default:
-				throw new SyntaxError('You must set injected class as a mmlpx recognized model!');
-		}
-
-		return instance;
-	}
-
-	dump(): Snapshot {
-		return this.container.dump().reduce((acc, entry) => ({ ...acc, [entry.k]: entry.v }), {});
-	}
-
-	load(snapshot: Snapshot) {
-
-		const cacheArray: ReadonlyArray<LRUEntry<string, any>> = Object.keys(snapshot).map(k => ({
-			k,
-			v: snapshot[k],
-			e: 0,
-		}));
-
-		this.container.load(cacheArray);
-	}
-
+    this.container.load(cacheArray);
+  }
 }
